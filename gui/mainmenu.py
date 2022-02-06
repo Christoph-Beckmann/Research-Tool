@@ -1,7 +1,4 @@
 from pathlib import Path
-
-# from tkinter import *
-# Explicit imports to satisfy Flake8
 from tkinter import Tk, Canvas, Button, PhotoImage
 
 
@@ -16,10 +13,10 @@ def relative_to_assets(path: str) -> Path:
 window = Tk()
 window.title("Research Tool")
 
-# Center Tkinter Window on the Screen
-
 window_width = 800
 window_height = 500
+
+# Center Tkinter Window on the Screen
 
 screen_width = window.winfo_screenwidth()
 screen_height = window.winfo_screenheight()
@@ -32,6 +29,7 @@ window.geometry(f'{window_width}x{window_height}+{int(x)}+{int(y)}')
 window.geometry("800x500")
 window.configure(bg="#EEEEEE")
 
+# Background Canvas
 
 canvas = Canvas(
     window,
@@ -52,17 +50,20 @@ canvas.create_rectangle(
     fill="#00ADB5",
     outline="")
 
+# Title, Description (Texts) and Images on Left Side
+
 canvas.create_text(
-    7.0,
-    481.0,
+    50.0,
+    56.0,
     anchor="nw",
-    text="©  (2022) Christoph Beckmann",
-    fill="#FFFFFF",
-    font=("Roboto", 12 * -1)
+    text="Research Tool",
+    fill="#EEEEEE",
+    font=("Roboto", 48 * -1)
 )
 
 image_checkbox = PhotoImage(
     file=relative_to_assets("checkbox.png"))
+
 image_cb1 = canvas.create_image(
     58.0,
     408.0,
@@ -89,9 +90,9 @@ image_cb4 = canvas.create_image(
 
 canvas.create_text(
     85.0,
-    392.0,
+    194.0,
     anchor="nw",
-    text="Further Research",
+    text="Summarize Text",
     fill="#FFFFFF",
     font=("Roboto", 24 * -1)
 )
@@ -116,20 +117,31 @@ canvas.create_text(
 
 canvas.create_text(
     85.0,
-    194.0,
+    392.0,
     anchor="nw",
-    text="Summarize Text",
+    text="Further Research",
     fill="#FFFFFF",
     font=("Roboto", 24 * -1)
 )
 
 canvas.create_text(
-    50.0,
-    56.0,
+    7.0,
+    481.0,
     anchor="nw",
-    text="Research Tool",
-    fill="#EEEEEE",
-    font=("Roboto", 48 * -1)
+    text="©  (2022) Christoph Beckmann",
+    fill="#FFFFFF",
+    font=("Roboto", 12 * -1)
+)
+
+# Right Side: Subtitle and Buttons
+
+canvas.create_text(
+    415.0,
+    66.0,
+    anchor="nw",
+    text="What should be done?",
+    fill="#222831",
+    font=("Roboto", 36 * -1)
 )
 
 # Buttons
@@ -184,15 +196,6 @@ btn_Research.place(
     y=379.0,
     width=200.0,
     height=58.0
-)
-
-canvas.create_text(
-    415.0,
-    66.0,
-    anchor="nw",
-    text="What should be done?",
-    fill="#222831",
-    font=("Roboto", 36 * -1)
 )
 
 window.resizable(False, False)
