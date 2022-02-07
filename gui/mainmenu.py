@@ -51,31 +51,31 @@ image_checkbox = PhotoImage(
     file=guisettings.relative_to_assets("checkbox.png"))
 
 image_cb1 = canvas.create_image(
-    58.0,
-    408.0,
-    image=image_checkbox
-)
-
-image_cb2 = canvas.create_image(
-    58.0,
-    341.0,
-    image=image_checkbox
-)
-
-image_cb3 = canvas.create_image(
-    58.0,
-    274.0,
-    image=image_checkbox
-)
-
-image_cb4 = canvas.create_image(
-    58.0,
+    96.0,
     208.0,
     image=image_checkbox
 )
 
+image_cb2 = canvas.create_image(
+    96.0,
+    273.0,
+    image=image_checkbox
+)
+“
+image_cb3 = canvas.create_image(
+    96.0,
+    340.0,
+    image=image_checkbox
+)
+
+image_cb4 = canvas.create_image(
+    96.0,
+    406.0,
+    image=image_checkbox
+)
+
 canvas.create_text(
-    85.0,
+    125.0,
     194.0,
     anchor="nw",
     text="Summarize Text",
@@ -84,8 +84,8 @@ canvas.create_text(
 )
 
 canvas.create_text(
-    85.0,
-    325.0,
+    125.0,
+    324.0,
     anchor="nw",
     text="Analyze Keywords",
     fill="#FFFFFF",
@@ -93,8 +93,8 @@ canvas.create_text(
 )
 
 canvas.create_text(
-    85.0,
-    258.0,
+    125.0,
+    257.0,
     anchor="nw",
     text="Identify Keywords",
     fill="#FFFFFF",
@@ -102,8 +102,8 @@ canvas.create_text(
 )
 
 canvas.create_text(
-    85.0,
-    392.0,
+    125.0,
+    390.0,
     anchor="nw",
     text="Further Research",
     fill="#FFFFFF",
