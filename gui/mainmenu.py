@@ -1,38 +1,24 @@
-from pathlib import Path
+import guisettings
 from tkinter import Tk, Canvas, Button, PhotoImage
 
 
-OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path("./assets")
+form_mainmenu = Tk()
+form_mainmenu.title("Research Tool")
 
+form_mainmenu_width = 800
+form_mainmenu_height = 500
 
-def relative_to_assets(path: str) -> Path:
-    return ASSETS_PATH / Path(path)
+x, y = guisettings.center_form(form_mainmenu, form_mainmenu_width, form_mainmenu_height)
+form_mainmenu.geometry(f'{form_mainmenu_width}x{form_mainmenu_height}+{x}+{y}')
 
+form_mainmenu.configure(bg="#EEEEEE")
 
-window = Tk()
-window.title("Research Tool")
-
-window_width = 800
-window_height = 500
-
-# Center Tkinter Window on the Screen
-
-screen_width = window.winfo_screenwidth()
-screen_height = window.winfo_screenheight()
-
-x = (screen_width / 2) - (window_width / 2)
-y = (screen_height / 2) - (window_height / 2)
-
-window.geometry(f'{window_width}x{window_height}+{int(x)}+{int(y)}')
-
-window.geometry("800x500")
-window.configure(bg="#EEEEEE")
+# functions to open new windows
 
 # Background Canvas
 
 canvas = Canvas(
-    window,
+    form_mainmenu,
     bg="#EEEEEE",
     height=500,
     width=800,
@@ -62,7 +48,7 @@ canvas.create_text(
 )
 
 image_checkbox = PhotoImage(
-    file=relative_to_assets("checkbox.png"))
+    file=guisettings.relative_to_assets("checkbox.png"))
 
 image_cb1 = canvas.create_image(
     58.0,
@@ -147,7 +133,7 @@ canvas.create_text(
 # Buttons
 
 btn_image_Summarize = PhotoImage(
-    file=relative_to_assets("btn_Summarize.png"))
+    file=guisettings.relative_to_assets("btn_Summarize.png"))
 
 btn_Summarize = Button(
     image=btn_image_Summarize,
@@ -164,7 +150,7 @@ btn_Summarize.place(
 )
 
 btn_image_Analyze = PhotoImage(
-    file=relative_to_assets("btn_Analyze.png"))
+    file=guisettings.relative_to_assets("btn_Analyze.png"))
 
 btn_Analyze = Button(
     image=btn_image_Analyze,
@@ -182,7 +168,7 @@ btn_Analyze.place(
 )
 
 btn_image_Research = PhotoImage(
-    file=relative_to_assets("btn_Research.png"))
+    file=guisettings.relative_to_assets("btn_Research.png"))
 
 btn_Research = Button(
     image=btn_image_Research,
@@ -198,6 +184,6 @@ btn_Research.place(
     height=58.0
 )
 
-window.resizable(False, False)
+form_mainmenu.resizable(False, False)
 
-window.mainloop()
+form_mainmenu.mainloop()
