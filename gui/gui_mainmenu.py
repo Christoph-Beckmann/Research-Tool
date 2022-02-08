@@ -1,3 +1,4 @@
+import os
 import gui_settings
 from tkinter import Tk, Canvas, Button, PhotoImage
 
@@ -8,8 +9,8 @@ form_mainmenu.title("Research Tool")
 form_mainmenu_width = 800
 form_mainmenu_height = 500
 
-x, y = gui_settings.center_form(form_mainmenu, form_mainmenu_width, form_mainmenu_height)
-form_mainmenu.geometry(f'{form_mainmenu_width}x{form_mainmenu_height}+{x}+{y}')
+center_x, center_y = gui_settings.center_form(form_mainmenu, form_mainmenu_width, form_mainmenu_height)
+form_mainmenu.geometry(f'{form_mainmenu_width}x{form_mainmenu_height}+{center_x}+{center_y}')
 
 form_mainmenu.configure(bg="#EEEEEE")
 
@@ -139,7 +140,7 @@ btn_Summarize = Button(
     image=btn_image_Summarize,
     borderwidth=0,
     highlightthickness=0,
-    command=lambda: print("Summarize pressed"),
+    command=lambda: exec(open("gui_summarize.py").read()),
     relief="flat"
 )
 btn_Summarize.place(

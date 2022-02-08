@@ -1,16 +1,16 @@
-import tkinter
-
 import gui_settings
 from tkinter import Tk, Canvas, Text, Button, PhotoImage, filedialog
+import tkinter.ttk
 
 
 form_summarize = Tk()
+form_summarize.title("Research Tool - Summarize")
 
 form_summarize_width = 1200
 form_summarize_height = 800
 
-x, y = gui_settings.center_form(form_summarize, form_summarize_width, form_summarize_height)
-form_summarize.geometry(f'{form_summarize_width}x{form_summarize_height}+{x}+{y}')
+center_x, center_y = gui_settings.center_form(form_summarize, form_summarize_width, form_summarize_height)
+form_summarize.geometry(f'{form_summarize_width}x{form_summarize_height}+{center_x}+{center_y}')
 
 form_summarize.configure(bg="#EEEEEE")
 
@@ -102,7 +102,7 @@ btn_back = Button(
     image=btn_image_back,
     borderwidth=0,
     highlightthickness=0,
-    command=lambda: print("button_4 clicked"),
+    command=lambda: print("Back clicked"),
     relief="flat"
 )
 btn_back.place(

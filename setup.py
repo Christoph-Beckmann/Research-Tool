@@ -9,7 +9,7 @@ with open('LICENSE') as f:
 setup(
     name='ResearchTool',
     version='0.1.0',
-    description='A Tool to summarize text, get keywords and analytics keywords',
+    description='A Tool to summarize text, get and analytics keywords',
     long_description=readme_file,
     author='Christoph Beckmann',
     author_email='Christoph-Beckmann@outlook.de',
