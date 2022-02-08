@@ -1,6 +1,6 @@
-import os
 import gui_settings
 from tkinter import Tk, Canvas, Button, PhotoImage
+import gui_summarize
 
 
 form_mainmenu = Tk()
@@ -49,7 +49,7 @@ canvas.create_text(
 )
 
 image_checkbox = PhotoImage(
-    file=gui_settings.relative_to_assets("checkbox.png"))
+    file=gui_settings.assets("checkbox.png"))
 
 image_cb1 = canvas.create_image(
     96.0,
@@ -133,14 +133,16 @@ canvas.create_text(
 
 # Buttons
 
+exec(open("gui_summarize.py").read())
+
 btn_image_Summarize = PhotoImage(
-    file=gui_settings.relative_to_assets("btn_Summarize.png"))
+    file=gui_settings.assets("btn_Summarize.png"))
 
 btn_Summarize = Button(
     image=btn_image_Summarize,
     borderwidth=0,
     highlightthickness=0,
-    command=lambda: exec(open("gui_summarize.py").read()),
+    command=lambda: gui_summarize.open_gui_summarize(),
     relief="flat"
 )
 btn_Summarize.place(
@@ -151,7 +153,7 @@ btn_Summarize.place(
 )
 
 btn_image_Analyze = PhotoImage(
-    file=gui_settings.relative_to_assets("btn_Analyze.png"))
+    file=gui_settings.assets("btn_Analyze.png"))
 
 btn_Analyze = Button(
     image=btn_image_Analyze,
@@ -169,7 +171,7 @@ btn_Analyze.place(
 )
 
 btn_image_Research = PhotoImage(
-    file=gui_settings.relative_to_assets("btn_Research.png"))
+    file=gui_settings.assets("btn_Research.png"))
 
 btn_Research = Button(
     image=btn_image_Research,
