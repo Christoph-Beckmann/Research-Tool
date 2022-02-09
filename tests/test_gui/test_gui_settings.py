@@ -2,7 +2,7 @@ from pathlib import Path
 from tkinter import Tk
 
 OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path("./test_assets")
+ASSETS_PATH = OUTPUT_PATH / Path("test_assets")
 
 
 def assets(path: str) -> Path:

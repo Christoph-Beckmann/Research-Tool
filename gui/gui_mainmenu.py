@@ -1,6 +1,6 @@
 import gui_settings
 from tkinter import Tk, Canvas, Button, PhotoImage
-import gui_summarize
+# import gui_summarize
 
 form_mainmenu = Tk()
 form_mainmenu.title("Research Tool")

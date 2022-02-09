@@ -1,5 +1,5 @@
 import test_gui_settings
-from tkinter import Tk, Canvas, Text, Button, PhotoImage, filedialog
+from tkinter import Button, PhotoImage, filedialog
 import tkinter.ttk
 
 
