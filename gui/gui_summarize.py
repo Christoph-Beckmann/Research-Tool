@@ -3,7 +3,7 @@ from tkinter import Tk, Canvas, Text, Button, PhotoImage, filedialog
 import tkinter.ttk
 
 
-def open_textfile(entry: Text):
+def open_textfile(textbox: Text):
     filetypes = (
         ('AlL files', '*.*')
     )
@@ -12,10 +12,9 @@ def open_textfile(entry: Text):
         defaultextension=".txt")
     fob = open(file, 'r')
     text = fob.read()
-    entry.delete(1.0, tkinter.END)
-    entry.insert(tkinter.INSERT, text)
+    textbox.delete(1.0, tkinter.END)
+    textbox.insert(tkinter.INSERT, text)
     fob.close()
-
 
 def open_gui_summarize():
 
@@ -54,7 +53,7 @@ def open_gui_summarize():
         image=btn_image_summarize,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: print("button_1 clicked"),
+        command=lambda: print("Summarize clicked"),
         relief="flat"
     )
     btn_summarize.place(
@@ -70,7 +69,7 @@ def open_gui_summarize():
         image=btn_image_export,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: print("button_2 clicked"),
+        command=lambda: print("Export pressed"),
         relief="flat"
     )
     btn_export.place(
@@ -86,7 +85,7 @@ def open_gui_summarize():
         image=btn_image_pathpicker,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: open_textfile(entry_text),
+        command=lambda: open_textfile(textbox_text),
         relief="flat"
     )
     btn_pathpicker.place(
@@ -102,7 +101,7 @@ def open_gui_summarize():
         image=btn_image_back,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: print("Back clicked"),
+        command=lambda: print("Back pressed"),
         relief="flat"
     )
     btn_back.place(
@@ -110,46 +109,6 @@ def open_gui_summarize():
         y=0.0,
         width=65.0,
         height=58.0
-    )
-
-    entry_image_text = PhotoImage(
-        file=gui_settings.assets("entry_text.png"))
-    entry_text = canvas.create_image(
-        300.0,
-        381.0,
-        image=entry_image_text
-    )
-    entry_text = Text(
-        bd=0,
-        fg='#EEEEEE',
-        bg="#00ADB5",
-        highlightthickness=0
-    )
-    entry_text.place(
-        x=50.0,
-        y=79.0,
-        width=500.0,
-        height=602.0
-    )
-
-    entry_image_summarized = PhotoImage(
-        file=gui_settings.assets("entry_summarized.png"))
-    entry_summarized = canvas.create_image(
-        900.0,
-        381.0,
-        image=entry_image_summarized
-    )
-    entry_summarized = Text(
-        bd=0,
-        fg='#222831',
-        bg="#EEEEEE",
-        highlightthickness=0
-    )
-    entry_summarized.place(
-        x=650.0,
-        y=79.0,
-        width=500.0,
-        height=602.0
     )
 
     canvas.create_text(
@@ -161,6 +120,19 @@ def open_gui_summarize():
         font=("Roboto", 36 * -1)
     )
 
+    textbox_text = Text(
+        bd=0,
+        fg='#EEEEEE',
+        bg="#00ADB5",
+        highlightthickness=0
+    )
+    textbox_text.place(
+        x=50.0,
+        y=79.0,
+        width=500.0,
+        height=602.0
+    )
+
     canvas.create_text(
         752.0,
         17.0,
@@ -168,6 +140,19 @@ def open_gui_summarize():
         text="Summarized Text:",
         fill="#EEEEEE",
         font=("Roboto", 36 * -1)
+    )
+
+    textbox_summarized = Text(
+        bd=0,
+        fg='#222831',
+        bg="#EEEEEE",
+        highlightthickness=0
+    )
+    textbox_summarized.place(
+        x=650.0,
+        y=79.0,
+        width=500.0,
+        height=602.0
     )
 
     form_summarize.resizable(False, False)

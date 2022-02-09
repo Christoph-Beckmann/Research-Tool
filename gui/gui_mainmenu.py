@@ -2,7 +2,6 @@ import gui_settings
 from tkinter import Tk, Canvas, Button, PhotoImage
 import gui_summarize
 
-
 form_mainmenu = Tk()
 form_mainmenu.title("Research Tool")
 
@@ -132,8 +131,6 @@ canvas.create_text(
 )
 
 # Buttons
-
-exec(open("gui_summarize.py").read())
 
 btn_image_Summarize = PhotoImage(
     file=gui_settings.assets("btn_Summarize.png"))
