@@ -25,29 +25,25 @@ def install_stopwords():
 
 
 # Automatic detection of the language and conversion from "de" to "Deutsch" using the packages Langdetect and ISO639.
-language = "English"
-
-
 def detectlanguage(text):
-    global language
     language = iso639.to_name(detect(text))
     return language
 
 
+# Read Textfile and create sentences
 def read(text):
-    file = open(text, "r")
-    data = file.readlines()
-    sentences_split = data[0].split(". ")
+    language = detectlanguage(text[0])                  # Function detectlanguage get the parameter text
+    sentences_split = text[0].split(". ")               # Sentences are stored as a list with Dot as a Delimiter
     sentences = []
     for sentence in sentences_split:
         sentences.append(sentence.replace("[^a-zA-Z]", " ").split(" "))
     sentences.pop()
-    return sentences
+    return sentences, language
 
 
-def sentence_similarity(sentence1, sentence2,  stopwords=None):
-    if stopwords is None:
-        stopwords = []
+def sentence_similarity(sentence1, sentence2,  stop_words=None):
+    if stop_words is None:
+        stop_words = []
     sentence1 = [w.lower() for w in sentence1]
     sentence2 = [w.lower() for w in sentence2]
     all_words = list(set(sentence1+sentence2))
@@ -55,11 +51,11 @@ def sentence_similarity(sentence1, sentence2,  stopwords=None):
     vector1 = [0] * len(all_words)
     vector2 = [0] * len(all_words)
     for w in sentence1:
-        if w in stopwords:
+        if w in stop_words:
             continue
         vector1[all_words.index(w)] += 1
     for w in sentence2:
-        if w in stopwords:
+        if w in stop_words:
             continue
         vector2[all_words.index(w)] += 1
     return 1-cosine_distance(vector1, vector2)
@@ -76,10 +72,10 @@ def gen_sim_matrix(sentences, stop_words=None):
         return similarity_matrix
 
 
-def build_summary(file_location, top_n=5):
+def build_summary(text, top_n=5):
     install_stopwords()
     summarized_text = []
-    sentences = read(file_location)
+    sentences, language = read(text)
     stop_words = stopwords.words(language)
     sentence_similarity_matrix = gen_sim_matrix(sentences, stop_words)
     sentence_similarity_graph = nx.from_numpy_array(sentence_similarity_matrix)
@@ -87,7 +83,4 @@ def build_summary(file_location, top_n=5):
     ranked_sentence = sorted(((scores[i], s) for i, s in enumerate(sentences)), reverse=True)
     for i in range(top_n):
         summarized_text.append(" ".join(ranked_sentence[i][1]))
-    print(". ".join(summarized_text))
-
-
-print(build_summary("../tests/test_researchtool/text.txt", 1))
+    return summarized_text

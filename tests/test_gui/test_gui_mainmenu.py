@@ -1,17 +1,20 @@
 import tkinter
 import test_gui_settings
+import test_gui_summarize
+
+# With help from this side: https://www.pythontutorial.net/tkinter/tkinter-toplevel/
 
 
 class GUIMainMenu(tkinter.Toplevel):
     def __init__(self):
-        super().__init__()
+        super().__init__(self)
 
         self_width = 800
         self_height = 500
         
-        center_x, center_y = test_gui_settings.center_form(self, self_width, self_height)
-        self.geometry(f'{self_width}x{self_height}+{center_x}+{center_y}')
-
+        # center_x, center_y = test_gui_settings.center_form(self, self_width, self_height)
+        # self.geometry(f'{self_width}x{self_height}+{center_x}+{center_y}')
+        self.geometry(f'{self_width}x{self_height}')
         self.title("Research Tool")
         self.configure(bg="#EEEEEE")
 
@@ -139,7 +142,7 @@ class GUIMainMenu(tkinter.Toplevel):
             image=btn_image_Summarize,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: self.open_gui_summarize().pack(expand=True),
+            command=lambda: self.open_gui_summarize(),
             relief="flat"
         )
         btn_Summarize.place(

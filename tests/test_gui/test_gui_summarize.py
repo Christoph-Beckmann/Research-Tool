@@ -24,9 +24,9 @@ class GUISummarize(tkinter.Toplevel):
         self_width = 1200
         self_height = 800
     
-        center_x, center_y = test_gui_settings.center_form(self, self_width, self_height)
-        self.geometry(f'{self_width}x{self_height}+{center_x}+{center_y}')
-
+        # center_x, center_y = test_gui_settings.center_form(self, self_width, self_height)
+        # self.geometry(f'{self_width}x{self_height}+{center_x}+{center_y}')
+        self.geometry(f'{self_width}x{self_height}')
         self.title("Research Tool - Summarize")
         self.configure(bg="#EEEEEE")
     
@@ -95,9 +95,9 @@ class GUISummarize(tkinter.Toplevel):
     
         btn_image_back = tkinter.PhotoImage(
             file=test_gui_settings.assets("btn_back.png"))
-        btn_back = ttkinter.Button(
+        btn_back = Button(
             image=btn_image_back,
-            command=lambda: self.closewindow(),
+            command=lambda: self.closewindow()
         )
         btn_back.place(
             x=0.0,

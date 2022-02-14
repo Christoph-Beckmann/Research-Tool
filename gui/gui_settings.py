@@ -1,16 +1,17 @@
+import sys
 from pathlib import Path
-from tkinter import Tk
+import tkinter as tk
 
-OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path("./assets")
+PROJECT_DIR = Path(__file__).parents[1]
+sys.path.append(str(PROJECT_DIR / Path('./researchtool')))  # System Path of backend is included - really necessary?
 
 
 def assets(path: str) -> Path:
-    return ASSETS_PATH / Path(path)
+    return PROJECT_DIR / Path('./gui/assets') / Path(path)
 
 
 # Center given Tkinter Form on the Screen
-def center_form(form: Tk, form_width: int, form_height: int):
+def center_form(form: tk, form_width: int, form_height: int):
     screen_width = form.winfo_screenwidth()
     screen_height = form.winfo_screenheight()
 

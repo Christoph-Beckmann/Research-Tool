@@ -1,158 +1,180 @@
-import gui_settings
-from tkinter import Tk, Canvas, Text, Button, PhotoImage, filedialog
-import tkinter.ttk
+import tkinter as tk
+from tkinter import filedialog as fd
+from gui import gui_settings
+from researchtool import summarization
 
 
-def open_textfile(textbox: Text):
-    filetypes = (
-        ('AlL files', '*.*')
-    )
-    file = filedialog.askopenfilename(
-        filetypes=[filetypes],
-        defaultextension=".txt")
-    fob = open(file, 'r')
-    text = fob.read()
-    textbox.delete(1.0, tkinter.END)
-    textbox.insert(tkinter.INSERT, text)
-    fob.close()
+class GUISummarize(tk.Toplevel):
+    def __init__(self, parent):
+        super().__init__(parent)
 
+        self_width = 1200
+        self_height = 800
 
-form_summarize = Tk()
-form_summarize.title("Research Tool - Summarize")
+        center_x, center_y = gui_settings.center_form(self, self_width, self_height)
+        self.geometry(f'{self_width}x{self_height}+{center_x}+{center_y}')
+        self.title("Research Tool - Summarize")
+        self.configure(bg="#EEEEEE")
 
-form_summarize_width = 1200
-form_summarize_height = 800
+        canvas = tk.Canvas(
+            self,
+            bg="#EEEEEE",
+            height=800,
+            width=1200,
+            bd=0,
+            highlightthickness=0,
+            relief="ridge"
+        )
 
-center_x, center_y = gui_settings.center_form(form_summarize, form_summarize_width, form_summarize_height)
-form_summarize.geometry(f'{form_summarize_width}x{form_summarize_height}+{center_x}+{center_y}')
+        canvas.place(x=0, y=0)
+        canvas.create_rectangle(
+            600.0,
+            0.0,
+            1200.0,
+            800.0,
+            fill="#00ADB5",
+            outline="")
+        self.btn_image_summarize = tk.PhotoImage(
+            file=gui_settings.assets("btn_summarize.png"))
+        btn_summarize = tk.Button(
+            self,
+            image=self.btn_image_summarize,
+            command=lambda: textbox_summarized.insert(
+                tk.END,
+                str(self.open_summary(textbox_text)))
+        )
+        btn_summarize.place(
+            x=200.0,
+            y=716.0,
+            width=200.0,
+            height=58.0
+        )
 
-form_summarize.configure(bg="#EEEEEE")
+        self.btn_image_export = tk.PhotoImage(
+            file=gui_settings.assets("btn_export.png"))
+        btn_export = tk.Button(
+            self,
+            image=self.btn_image_export,
+            borderwidth=0,
+            highlightthickness=0,
+            command=lambda: self.export_textfile(textbox_summarized),
+            relief="flat"
+        )
+        btn_export.place(
+            x=800.0,
+            y=716.0,
+            width=200.0,
+            height=58.0
+        )
 
-canvas = Canvas(
-    form_summarize,
-    bg="#EEEEEE",
-    height=800,
-    width=1200,
-    bd=0,
-    highlightthickness=0,
-    relief="ridge"
-)
+        self.btn_image_back = tk.PhotoImage(
+            file=gui_settings.assets("btn_back.png"))
+        btn_back = tk.Button(
+            self,
+            image=self.btn_image_back,
+            command=lambda: self.close_window()
+        )
+        btn_back.place(
+            x=0.0,
+            y=0.0,
+            width=65.0,
+            height=58.0
+        )
 
-canvas.place(x=0, y=0)
-canvas.create_rectangle(
-    600.0,
-    0.0,
-    1200.0,
-    800.0,
-    fill="#00ADB5",
-    outline="")
-btn_image_summarize = PhotoImage(
-    file=gui_settings.assets("btn_summarize.png"))
-btn_summarize = Button(
-    image=btn_image_summarize,
-    borderwidth=0,
-    highlightthickness=0,
-    command=lambda: print("Summarize clicked"),
-    relief="flat"
-)
-btn_summarize.place(
-    x=200.0,
-    y=716.0,
-    width=200.0,
-    height=58.0
-)
+        canvas.create_text(
+            207.0,
+            17.0,
+            anchor="nw",
+            text="Insert Text:",
+            fill="#222831",
+            font=("Roboto", 36 * -1)
+        )
 
-btn_image_export = PhotoImage(
-    file=gui_settings.assets("btn_export.png"))
-btn_export = Button(
-    image=btn_image_export,
-    borderwidth=0,
-    highlightthickness=0,
-    command=lambda: print("Export pressed"),
-    relief="flat"
-)
-btn_export.place(
-    x=800.0,
-    y=716.0,
-    width=200.0,
-    height=58.0
-)
+        textbox_text = tk.Text(
+            self,
+            bd=0,
+            fg='#EEEEEE',
+            bg="#00ADB5",
+            highlightthickness=0
+        )
+        textbox_text.place(
+            x=50.0,
+            y=79.0,
+            width=500.0,
+            height=602.0
+        )
 
-btn_image_pathpicker = PhotoImage(
-    file=gui_settings.assets("btn_pathpicker.png"))
-btn_pathpicker = Button(
-    image=btn_image_pathpicker,
-    borderwidth=0,
-    highlightthickness=0,
-    command=lambda: open_textfile(textbox_text),
-    relief="flat"
-)
-btn_pathpicker.place(
-    x=50.0,
-    y=716.0,
-    width=65.0,
-    height=58.0
-)
+        canvas.create_text(
+            752.0,
+            17.0,
+            anchor="nw",
+            text="Summarized Text:",
+            fill="#EEEEEE",
+            font=("Roboto", 36 * -1)
+        )
 
-btn_image_back = PhotoImage(
-    file=gui_settings.assets("btn_back.png"))
-btn_back = Button(
-    image=btn_image_back,
-    borderwidth=0,
-    highlightthickness=0,
-    command=lambda: print("Back pressed"),
-    relief="flat"
-)
-btn_back.place(
-    x=0.0,
-    y=0.0,
-    width=65.0,
-    height=58.0
-)
+        textbox_summarized = tk.Text(
+            self,
+            bd=0,
+            fg='#222831',
+            bg="#EEEEEE",
+            highlightthickness=0
+        )
+        textbox_summarized.place(
+            x=650.0,
+            y=79.0,
+            width=500.0,
+            height=602.0
+        )
 
-canvas.create_text(
-    207.0,
-    17.0,
-    anchor="nw",
-    text="Insert Text:",
-    fill="#222831",
-    font=("Roboto", 36 * -1)
-)
+        self.btn_image_pathpicker = tk.PhotoImage(
+            file=gui_settings.assets("btn_pathpicker.png"))
+        btn_pathpicker = tk.Button(
+            self,
+            image=self.btn_image_pathpicker,
+            borderwidth=0,
+            highlightthickness=0,
+            command=lambda: self.open_textfile(textbox_text),
+            relief="flat"
+        )
+        btn_pathpicker.place(
+            x=50.0,
+            y=716.0,
+            width=65.0,
+            height=58.0
+        )
+    
+        self.resizable(False, False)
 
-textbox_text = Text(
-    bd=0,
-    fg='#EEEEEE',
-    bg="#00ADB5",
-    highlightthickness=0
-)
-textbox_text.place(
-    x=50.0,
-    y=79.0,
-    width=500.0,
-    height=602.0
-)
+    def open_textfile(self, textbox: tk.Text):
+        filetypes = (
+            ('AlL files', '*.*')
+        )
+        file = fd.askopenfilename(
+            filetypes=[filetypes],
+            defaultextension=".txt")
+        fob = open(file, 'r')
+        text = fob.read()
+        textbox.delete(1.0, tk.END)
+        textbox.insert(tk.INSERT, text)
+        fob.close()
 
-canvas.create_text(
-    752.0,
-    17.0,
-    anchor="nw",
-    text="Summarized Text:",
-    fill="#EEEEEE",
-    font=("Roboto", 36 * -1)
-)
+    def open_summary(self, textbox: tk.Text):
+        summary = ". ".join(summarization.build_summary((textbox.get(1.0, tk.END), 1)))
+        return summary
 
-textbox_summarized = Text(
-    bd=0,
-    fg='#222831',
-    bg="#EEEEEE",
-    highlightthickness=0
-)
-textbox_summarized.place(
-    x=650.0,
-    y=79.0,
-    width=500.0,
-    height=602.0
-)
+    def export_textfile(self, textbox: tk.Text):
+        filetypes = (
+            ('AlL files', '*.*')
+        )
+        file = fd.asksaveasfilename(
+            initialfile='Untitled.txt',
+            defaultextension=".txt", filetypes=[("All Files", "*.*"), ("Text Documents", "*.txt")])
+        if file is None:
+            return
+        text = str(textbox.get(1.0, tk.END))
+        with open(file, 'w') as file:
+            file.write(text)
 
-form_summarize.resizable(False, False)
-form_summarize.mainloop()
+    def close_window(self):
+        self.destroy()
