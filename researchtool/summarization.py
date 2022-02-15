@@ -32,12 +32,13 @@ def detectlanguage(text):
 
 # Read Textfile and create sentences
 def read(text):
-    language = detectlanguage(text[0])                  # Function detectlanguage get the parameter text
-    sentences_split = text[0].split(". ")               # Sentences are stored as a list with Dot as a Delimiter
+    language = detectlanguage(text)                  # Function detectlanguage get the parameter text
+    sentences_split = text.split(". ")               # Sentences are stored as a list with Dot as a Delimiter
     sentences = []
     for sentence in sentences_split:
         sentences.append(sentence.replace("[^a-zA-Z]", " ").split(" "))
     sentences.pop()
+
     return sentences, language
 
 
@@ -84,3 +85,5 @@ def build_summary(text, top_n=5):
     for i in range(top_n):
         summarized_text.append(" ".join(ranked_sentence[i][1]))
     return summarized_text
+
+

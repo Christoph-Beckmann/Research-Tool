@@ -1,5 +1,4 @@
 import tkinter as tk
-from tkinter import filedialog as fd
 from gui import gui_settings
 from researchtool import summarization
 
@@ -27,6 +26,31 @@ class GUISummarize(tk.Toplevel):
         )
 
         canvas.place(x=0, y=0)
+
+        canvas.create_text(
+            202.0,
+            731.0,
+            anchor="nw",
+            text="Top:",
+            fill="#000000",
+            font=("Roboto", 24 * -1)
+        )
+
+        textbox_top = tk.Entry(
+            self,
+            justify="center",
+            bd=0,
+            fg="#EEEEEE",
+            bg="#00ADB5",
+            highlightthickness=0,
+            font=("Roboto", 24 * -1),
+        )
+        textbox_top.place(
+            x=267.0,
+            y=716.0,
+            width=65.0,
+            height=56.0
+        )
         canvas.create_rectangle(
             600.0,
             0.0,
@@ -35,44 +59,73 @@ class GUISummarize(tk.Toplevel):
             fill="#00ADB5",
             outline="")
         self.btn_image_summarize = tk.PhotoImage(
-            file=gui_settings.assets("btn_summarize.png"))
+            file=gui_settings.assets("btn_summarize.png")
+        )
         btn_summarize = tk.Button(
             self,
             image=self.btn_image_summarize,
-            command=lambda: textbox_summarized.insert(
-                tk.END,
-                str(self.open_summary(textbox_text)))
+            command=lambda: (
+                textbox_summarized.delete(1.0, tk.END),
+                textbox_summarized.insert(
+                    1.0,
+                    ". ".join(
+                        summarization.build_summary(
+                            textbox_text.get(1.0, tk.END),
+                            gui_settings.is_top_empty(textbox_top)
+                        )
+                    )
+                )
+            )
         )
         btn_summarize.place(
-            x=200.0,
+            x=350.0,
             y=716.0,
             width=200.0,
             height=58.0
         )
 
         self.btn_image_export = tk.PhotoImage(
-            file=gui_settings.assets("btn_export.png"))
+            file=gui_settings.assets("btn_export.png")
+        )
         btn_export = tk.Button(
             self,
             image=self.btn_image_export,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: self.export_textfile(textbox_summarized),
+            command=lambda: gui_settings.export_textfile(textbox_summarized),
             relief="flat"
         )
         btn_export.place(
-            x=800.0,
+            x=948.0,
+            y=716.0,
+            width=200.0,
+            height=58.0
+        )
+
+        self.btn_image_analyze_kw = tk.PhotoImage(
+            file=gui_settings.assets("btn_analyzekw.png"))
+        btn_analyze_kw = tk.Button(
+            self,
+            image=self.btn_image_analyze_kw,
+            borderwidth=0,
+            highlightthickness=0,
+            command=lambda: print("Analyze Keywords pressed"),
+            relief="flat"
+        )
+        btn_analyze_kw.place(
+            x=649.0,
             y=716.0,
             width=200.0,
             height=58.0
         )
 
         self.btn_image_back = tk.PhotoImage(
-            file=gui_settings.assets("btn_back.png"))
+            file=gui_settings.assets("btn_back.png")
+        )
         btn_back = tk.Button(
             self,
             image=self.btn_image_back,
-            command=lambda: self.close_window()
+            command=lambda: gui_settings.close_window(self)
         )
         btn_back.place(
             x=0.0,
@@ -128,13 +181,14 @@ class GUISummarize(tk.Toplevel):
         )
 
         self.btn_image_pathpicker = tk.PhotoImage(
-            file=gui_settings.assets("btn_pathpicker.png"))
+            file=gui_settings.assets("btn_pathpicker.png")
+        )
         btn_pathpicker = tk.Button(
             self,
             image=self.btn_image_pathpicker,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: self.open_textfile(textbox_text),
+            command=lambda: gui_settings.open_textfile(textbox_text),
             relief="flat"
         )
         btn_pathpicker.place(
@@ -145,36 +199,3 @@ class GUISummarize(tk.Toplevel):
         )
     
         self.resizable(False, False)
-
-    def open_textfile(self, textbox: tk.Text):
-        filetypes = (
-            ('AlL files', '*.*')
-        )
-        file = fd.askopenfilename(
-            filetypes=[filetypes],
-            defaultextension=".txt")
-        fob = open(file, 'r')
-        text = fob.read()
-        textbox.delete(1.0, tk.END)
-        textbox.insert(tk.INSERT, text)
-        fob.close()
-
-    def open_summary(self, textbox: tk.Text):
-        summary = ". ".join(summarization.build_summary((textbox.get(1.0, tk.END), 1)))
-        return summary
-
-    def export_textfile(self, textbox: tk.Text):
-        filetypes = (
-            ('AlL files', '*.*')
-        )
-        file = fd.asksaveasfilename(
-            initialfile='Untitled.txt',
-            defaultextension=".txt", filetypes=[("All Files", "*.*"), ("Text Documents", "*.txt")])
-        if file is None:
-            return
-        text = str(textbox.get(1.0, tk.END))
-        with open(file, 'w') as file:
-            file.write(text)
-
-    def close_window(self):
-        self.destroy()
