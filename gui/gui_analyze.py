@@ -81,7 +81,7 @@ class GUIAnalyze(tk.Toplevel):
             font=("Roboto", 24 * -1)
         )
 
-        # TextAreas
+        # TextArea
 
         textarea_text = tk.Text(
             self,
@@ -97,13 +97,15 @@ class GUIAnalyze(tk.Toplevel):
             height=377.0
         )
 
-        textarea_keywords = tk.Text(
+        # Listbox
+
+        listbox_keywords = tk.Listbox(
             self,
             bd=0,
             bg="#EEEEEE",
             highlightthickness=0
         )
-        textarea_keywords.place(
+        listbox_keywords.place(
             x=650.0,
             y=79.0,
             width=500.0,
