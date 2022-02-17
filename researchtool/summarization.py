@@ -4,8 +4,7 @@ from nltk.cluster.util import cosine_distance       # Necessary for calculate Co
 from nltk.corpus import stopwords                   # nltk stopwords files
 import numpy as np
 import networkx as nx                               # Network analysis
-from langdetect import detect                       # Language Detection in ISO639-1
-import iso639                                       # Transform ISO639-1 to ISO language name for stopwords file
+import helpers
 
 
 # Nltk Downloader is broken. There is a workaround to download the required "stopwords" package.
@@ -24,15 +23,9 @@ def install_stopwords():
     nltk.download('stopwords')     # Adapted to download only the required package.
 
 
-# Automatic detection of the language and conversion from "de" to "Deutsch" using the packages Langdetect and ISO639.
-def detectlanguage(text):
-    language = iso639.to_name(detect(text))
-    return language
-
-
 # Read Textfile and create sentences
 def read(text):
-    language = detectlanguage(text)                  # Function detectlanguage get the parameter text
+    language = helpers.detectlanguage(text, True)                  # Function detectlanguage get the parameter text
     sentences_split = text.split(". ")               # Sentences are stored as a list with Dot as a Delimiter
     sentences = []
     for sentence in sentences_split:

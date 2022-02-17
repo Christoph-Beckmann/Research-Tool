@@ -103,7 +103,8 @@ class GUIAnalyze(tk.Toplevel):
             self,
             bd=0,
             bg="#EEEEEE",
-            highlightthickness=0
+            highlightthickness=0,
+            selectmode="multiple"
         )
         listbox_keywords.place(
             x=650.0,
@@ -171,7 +172,16 @@ class GUIAnalyze(tk.Toplevel):
             image=self.btn_image_analyze_kw,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print("Analyze KW pressed"),
+            command=lambda: (
+                listbox_keywords.delete(0, tk.END),
+                keywordsanalytics.extract_keywords(
+                    textarea_text.get(1.0, tk.END),
+                    1,
+                    0.2,
+                    20,
+                    listbox_keywords
+                )
+            ),
             relief="flat"
         )
         btn_analyze_kw.place(
@@ -205,7 +215,7 @@ class GUIAnalyze(tk.Toplevel):
             image=self.btn_image_export,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: gui_settings.export_textfile(textarea_keywords),
+           # command=lambda: gui_settings.export_textfile(textarea_keywords),
             relief="flat"
         )
         btn_export.place(
