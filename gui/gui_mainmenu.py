@@ -135,7 +135,8 @@ class GUIMainMenu(tk.Tk):
         )
         
         # Buttons
-        
+
+        # Summarized
         self.btn_image_Summarize = tk.PhotoImage(
             file=gui_settings.assets("btn_Summarize.png")
         )
@@ -154,7 +155,8 @@ class GUIMainMenu(tk.Tk):
             width=200.0,
             height=58.0
         )
-        
+
+        # Keyword Analysis
         self.btn_image_Analyze = tk.PhotoImage(
             file=gui_settings.assets("btn_Analyze.png")
         )
@@ -173,7 +175,8 @@ class GUIMainMenu(tk.Tk):
             width=200.0,
             height=58.0
         )
-        
+
+        # Further Research
         self.btn_image_Research = tk.PhotoImage(
             file=gui_settings.assets("btn_Research.png")
         )
@@ -195,6 +198,8 @@ class GUIMainMenu(tk.Tk):
 
         self.btn_image_exit = tk.PhotoImage(
             file=gui_settings.assets("btn_back.png"))
+
+        # Close Form
         btn_exit = tk.Button(
             self,
             image=self.btn_image_exit,
@@ -211,6 +216,8 @@ class GUIMainMenu(tk.Tk):
         )
 
         self.resizable(False, False)
+
+    # Functions to call TopLevel Windows
 
     def open_gui_summarize(self):
         form_summarize = gui_summarize.GUISummarize(self)

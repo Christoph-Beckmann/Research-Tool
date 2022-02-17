@@ -32,7 +32,7 @@ def filetypes_dialogs():
     return filetypes
 
 
-def open_textfile(textbox: tk.Text):
+def open_textfile(textarea: tk.Text):
     file = fd.askopenfilename(
         filetypes=[('All Files', '*.*'), ('Text Documents', '*.txt')],
         defaultextension=".txt")
@@ -40,29 +40,29 @@ def open_textfile(textbox: tk.Text):
         return
     fob = open(file, 'r')
     text = fob.read()
-    textbox.delete(1.0, tk.END)
-    textbox.insert(tk.INSERT, text)
+    textarea.delete(1.0, tk.END)
+    textarea.insert(tk.INSERT, text)
     fob.close()
 
 
-def export_textfile(textbox: tk.Text):
+def export_textfile(textarea: tk.Text):
     file = fd.asksaveasfilename(
         initialfile='Untitled.txt',
         filetypes=[('All Files', '*.*'), ('Text Documents', '*.txt')],
         defaultextension=".txt")
     if file is None:
         return
-    text = str(textbox.get(1.0, tk.END)
+    text = str(textarea.get(1.0, tk.END)
                )
     with open(file, 'w') as file:
         file.write(text)
 
 
-def is_top_empty(textbox: tk.Entry):
-    if len(textbox.get()) == 0:
+def is_top_empty(textarea: tk.Entry):
+    if len(textarea.get()) == 0:
         topn = 5                            # Standard value
     else:
-        topn = int(textbox.get())
+        topn = int(textarea.get())
     return topn
 
 
