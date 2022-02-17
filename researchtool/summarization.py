@@ -85,5 +85,3 @@ def build_summary(text, top_n=5):
     for i in range(top_n):
         summarized_text.append(" ".join(ranked_sentence[i][1]))
     return summarized_text
-
-

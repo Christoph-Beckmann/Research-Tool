@@ -17,7 +17,3 @@ class GUIAnalyze(tk.Toplevel):
         self.configure(bg="#EEEEEE")
 
         self.resizable(False, False)
-
-
-
-
