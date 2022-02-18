@@ -11,7 +11,7 @@ class GUISummarize(tk.Toplevel):
         self_height = 800
 
         center_x, center_y = gui_helpers.center_form(self, self_width, self_height)
-        self.geometry(f'{self_width}x{self_height}+{center_x}+{center_y}')
+        self.geometry(f"{self_width}x{self_height}+{center_x}+{center_y}")
         self.title("Research Tool - Summarize")
         self.configure(bg="#EEEEEE")
 
@@ -71,7 +71,7 @@ class GUISummarize(tk.Toplevel):
         textarea_text = tk.Text(
             self,
             bd=0,
-            fg='#EEEEEE',
+            fg="#EEEEEE",
             bg="#00ADB5",
             highlightthickness=0
         )
@@ -85,7 +85,7 @@ class GUISummarize(tk.Toplevel):
         textarea_summarized = tk.Text(
             self,
             bd=0,
-            fg='#222831',
+            fg="#222831",
             bg="#EEEEEE",
             highlightthickness=0
         )

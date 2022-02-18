@@ -7,11 +7,11 @@ import csv
 from researchtool import keywordsanalytics
 
 PROJECT_DIR = Path(__file__).parents[1]
-sys.path.append(str(PROJECT_DIR / Path('./researchtool')))  # System Path of backend is included - really necessary?
+sys.path.append(str(PROJECT_DIR / Path("./researchtool")))  # System Path of backend is included - really necessary?
 
 
 def assets(path: str) -> Path:
-    return PROJECT_DIR / Path('./gui/assets') / Path(path)
+    return PROJECT_DIR / Path("./gui/assets") / Path(path)
 
 
 # Center given Tkinter Form on the Screen with the help from stackoverflow:
@@ -21,10 +21,8 @@ def center_form(form: tk, form_width: int, form_height: int):
     form.update_idletasks()
     screen_width = form.winfo_screenwidth()
     screen_height = form.winfo_screenheight()
-
     x_coordinate = (screen_width / 2) - (form_width / 2)
     y_coordinate = (screen_height / 2) - (form_height / 2)
-
     return int(x_coordinate), int(y_coordinate)
 
 
@@ -37,16 +35,23 @@ def filetypes_dialogs():
 
 def open_textfile(textarea: tk.Text):
     file = fd.askopenfilename(
-        filetypes=[('All Files', '*.*'), ('Text Documents', '*.txt')],
+        filetypes=[("All Files", "*.*"), ("Text Documents", "*.txt")],
         defaultextension=".txt")
     if file is None:
         return
     else:
-        fob = open(file, 'r')
+        fob = open(file, "r")
         text = fob.read()
         textarea.delete(1.0, tk.END)
         textarea.insert(tk.INSERT, text)
         fob.close()
+
+
+def insert_kw(listbox: tkinter.Listbox, keywords):
+    s = 0
+    for i in keywords:
+        listbox.insert(s, i[0])
+        s += 1
 
 
 def insert_related_kw(listbox: tkinter.Listbox, selection):
@@ -58,31 +63,36 @@ def insert_related_kw(listbox: tkinter.Listbox, selection):
         s += 1
 
 
+def get_selection(listbox: tkinter.Listbox):
+    selection_list = [listbox.get(i) for i in listbox.curselection()]
+    return selection_list
+
+
 def export_textarea(textarea: tk.Text):
     file = fd.asksaveasfilename(
-        initialfile='Untitled.txt',
-        filetypes=[('All Files', '*.*'), ('Text Documents', '*.txt')],
+        initialfile="Untitled.txt",
+        filetypes=[("All Files", "*.*"), ("Text Documents", "*.txt")],
         defaultextension=".txt"
     )
     if file is None:
         return
     else:
         text = str(textarea.get(1.0, tk.END))
-        with open(file, 'w') as file:
+        with open(file, "w") as file:
             file.write(text)
 
 
 def export_kw_listbox(listbox: tk.Listbox):
     csvfile = fd.asksaveasfilename(
-        initialfile='Untitled.csv',
-        filetypes=[('All Files', '*.*'), ('CSV', '*.csv')],
+        initialfile="Untitled.csv",
+        filetypes=[("All Files", "*.*"), ("CSV", "*.csv")],
         defaultextension=".csv"
     )
     if csvfile is None:
         return
     else:
         items = listbox.get(0, tk.END)
-        items = ('Keywords', ) + items
+        items = ("Keywords", ) + items
         with open(csvfile, "w", newline="") as csvfile:
             writer = csv.writer(csvfile, delimiter="\n")
             writer.writerow(items)
@@ -90,8 +100,8 @@ def export_kw_listbox(listbox: tk.Listbox):
 
 def export_further_listbox(listbox_kw: tk.Listbox, listbox_further: tk.Listbox):
     csvfile = fd.asksaveasfilename(
-        initialfile='Untitled.csv',
-        filetypes=[('All Files', '*.*'), ('CSV', '*.csv')],
+        initialfile="Untitled.csv",
+        filetypes=[("All Files", "*.*"), ("CSV", "*.csv")],
         defaultextension=".csv"
     )
     if csvfile is None:
@@ -99,7 +109,7 @@ def export_further_listbox(listbox_kw: tk.Listbox, listbox_further: tk.Listbox):
     else:
         items = listbox_further.get(0, tk.END)
         current_selection = listbox_kw.get(listbox_kw.curselection())
-        items = (f'{current_selection}', ) + items
+        items = (f"{current_selection}", ) + items
         with open(csvfile, "w", newline="") as csvfile:
             writer = csv.writer(csvfile, delimiter="\n")
             writer.writerow(items)

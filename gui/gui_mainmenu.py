@@ -14,7 +14,7 @@ class GUIMainMenu(tk.Tk):
         self_width = 800
         self_height = 500
         center_x, center_y = gui_helpers.center_form(self, self_width, self_height)
-        self.geometry(f'{self_width}x{self_height}+{center_x}+{center_y}')
+        self.geometry(f"{self_width}x{self_height}+{center_x}+{center_y}")
         self.title("Research Tool")
         self.configure(bg="#EEEEEE")
 

@@ -11,7 +11,7 @@ class GUIAnalyze(tk.Toplevel):
         self_height = 800
 
         center_x, center_y = gui_helpers.center_form(self, self_width, self_height)
-        self.geometry(f'{self_width}x{self_height}+{center_x}+{center_y}')
+        self.geometry(f"{self_width}x{self_height}+{center_x}+{center_y}")
         self.title("Research Tool - Keywords Analysis")
         self.configure(bg="#EEEEEE")
 
@@ -85,7 +85,7 @@ class GUIAnalyze(tk.Toplevel):
         textarea_text = tk.Text(
             self,
             bd=0,
-            fg='#EEEEEE',
+            fg="#EEEEEE",
             bg="#00ADB5",
             highlightthickness=0
         )
@@ -128,7 +128,8 @@ class GUIAnalyze(tk.Toplevel):
             self,
             bd=0,
             bg="#EEEEEE",
-            highlightthickness=0
+            highlightthickness=0,
+            selectmode="multiple"
         )
         listbox_further_keywords.place(
             x=901.0,
@@ -194,6 +195,24 @@ class GUIAnalyze(tk.Toplevel):
             height=56.0
         )
 
+        spinbox_years = tk.Spinbox(
+            self,
+            justify="center",
+            bd=0,
+            fg="#00ADB5",
+            bg="#EEEEEE",
+            highlightthickness=0,
+            font=("Roboto", 24 * -1),
+            from_=1,
+            to=100
+        )
+        spinbox_years.place(
+            x=1085.0,
+            y=566.0,
+            width=65.0,
+            height=56.0
+        )
+
         # Buttons
 
         self.btn_image_analyze_kw = tk.PhotoImage(
@@ -205,12 +224,14 @@ class GUIAnalyze(tk.Toplevel):
             highlightthickness=0,
             command=lambda: (
                 listbox_keywords.delete(0, tk.END),
-                keywordsanalytics.extract_keywords(
-                    textarea_text.get(1.0, tk.END),
-                    int(spinbox_wordcount.get()),
-                    float(spinbox_duplication.get()),
-                    int(spinbox_max_keywords.get()),
-                    listbox_keywords
+                gui_helpers.insert_kw(
+                    listbox_keywords,
+                    keywordsanalytics.extract_keywords(
+                        textarea_text.get(1.0, tk.END),
+                        int(spinbox_wordcount.get()),
+                        float(spinbox_duplication.get()),
+                        int(spinbox_max_keywords.get()),
+                    )
                 )
             ),
             relief="flat"
@@ -268,6 +289,28 @@ class GUIAnalyze(tk.Toplevel):
             y=481.0,
             width=200.0,
             height=58.0
+        )
+
+        self.btn_image_get_historical = tk.PhotoImage(
+            file=gui_helpers.assets("btn_get_historical.png"))
+        btn_get_historical = tk.Button(
+            self,
+            image=self.btn_image_get_historical,
+            borderwidth=0,
+            highlightthickness=0,
+            command=lambda: (
+                keywordsanalytics.interest_of_time(
+                    gui_helpers.get_selection(listbox_further_keywords),
+                    int(spinbox_years.get())
+                )
+            ),
+            relief="flat"
+        )
+        btn_get_historical.place(
+            x=650.0,
+            y=566.0,
+            width=365.0,
+            height=59.0
         )
 
         self.btn_image_back = tk.PhotoImage(
