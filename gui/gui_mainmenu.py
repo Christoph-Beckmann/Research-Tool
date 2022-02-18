@@ -1,5 +1,5 @@
 import tkinter as tk
-import gui_settings
+import gui_helpers
 import gui_summarize
 import gui_analyze
 
@@ -13,7 +13,7 @@ class GUIMainMenu(tk.Tk):
 
         self_width = 800
         self_height = 500
-        center_x, center_y = gui_settings.center_form(self, self_width, self_height)
+        center_x, center_y = gui_helpers.center_form(self, self_width, self_height)
         self.geometry(f'{self_width}x{self_height}+{center_x}+{center_y}')
         self.title("Research Tool")
         self.configure(bg="#EEEEEE")
@@ -51,7 +51,7 @@ class GUIMainMenu(tk.Tk):
         )
         
         self.image_checkbox = tk.PhotoImage(
-            file=gui_settings.assets("checkbox.png")
+            file=gui_helpers.assets("checkbox.png")
         )
 
         canvas.create_image(
@@ -138,7 +138,7 @@ class GUIMainMenu(tk.Tk):
 
         # Summarized
         self.btn_image_Summarize = tk.PhotoImage(
-            file=gui_settings.assets("btn_Summarize.png")
+            file=gui_helpers.assets("btn_Summarize.png")
         )
         
         btn_summarize = tk.Button(
@@ -158,7 +158,7 @@ class GUIMainMenu(tk.Tk):
 
         # Keyword Analysis
         self.btn_image_Analyze = tk.PhotoImage(
-            file=gui_settings.assets("btn_Analyze.png")
+            file=gui_helpers.assets("btn_Analyze.png")
         )
         btn_analyze = tk.Button(
             self,
@@ -178,7 +178,7 @@ class GUIMainMenu(tk.Tk):
 
         # Further Research
         self.btn_image_Research = tk.PhotoImage(
-            file=gui_settings.assets("btn_Research.png")
+            file=gui_helpers.assets("btn_Research.png")
         )
 
         btn_research = tk.Button(
@@ -197,7 +197,7 @@ class GUIMainMenu(tk.Tk):
         )
 
         self.btn_image_exit = tk.PhotoImage(
-            file=gui_settings.assets("btn_back.png"))
+            file=gui_helpers.assets("btn_back.png"))
 
         # Close Form
         btn_exit = tk.Button(
@@ -205,7 +205,7 @@ class GUIMainMenu(tk.Tk):
             image=self.btn_image_exit,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: gui_settings.close_window(self),
+            command=lambda: gui_helpers.close_window(self),
             relief="flat"
         )
         btn_exit.place(

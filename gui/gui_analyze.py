@@ -1,6 +1,5 @@
 import tkinter as tk
-from tkinter import filedialog as fd
-from gui import gui_settings
+from gui import gui_helpers
 from researchtool import keywordsanalytics
 
 
@@ -11,7 +10,7 @@ class GUIAnalyze(tk.Toplevel):
         self_width = 1200
         self_height = 800
 
-        center_x, center_y = gui_settings.center_form(self, self_width, self_height)
+        center_x, center_y = gui_helpers.center_form(self, self_width, self_height)
         self.geometry(f'{self_width}x{self_height}+{center_x}+{center_y}')
         self.title("Research Tool - Keywords Analysis")
         self.configure(bg="#EEEEEE")
@@ -68,7 +67,7 @@ class GUIAnalyze(tk.Toplevel):
             215.0,
             573.0,
             anchor="nw",
-            text="Duplication Treshold:",
+            text="Duplication Threshold:",
             fill="#000000",
             font=("Roboto", 24 * -1)
         )
@@ -97,25 +96,49 @@ class GUIAnalyze(tk.Toplevel):
             height=377.0
         )
 
-        # Listbox
+        # Listboxes
 
         listbox_keywords = tk.Listbox(
             self,
             bd=0,
             bg="#EEEEEE",
             highlightthickness=0,
-            selectmode="multiple"
         )
         listbox_keywords.place(
             x=650.0,
             y=79.0,
-            width=500.0,
+            width=249.0,
             height=377.0
         )
 
-        # Entry's
+        # adapted:
+        # https://stackoverflow.com/questions/7616541/get-selected-item-in-listbox-and-call-another-function-storing-the-selected-for
+        def on_select(event):
+            widget = event.widget
+            selection_item = widget.curselection()
+            selection = widget.get(selection_item[0])
+            gui_helpers.insert_related_kw(listbox_further_keywords, selection)
 
-        entry_wordcount = tk.Entry(
+        listbox_keywords.bind(
+            "<<ListboxSelect>>",
+            on_select
+        )
+
+        listbox_further_keywords = tk.Listbox(
+            self,
+            bd=0,
+            bg="#EEEEEE",
+            highlightthickness=0
+        )
+        listbox_further_keywords.place(
+            x=901.0,
+            y=79.0,
+            width=249.0,
+            height=377.0
+        )
+
+        # Spin-boxes
+        spinbox_wordcount = tk.Spinbox(
             self,
             justify="center",
             bd=0,
@@ -123,15 +146,17 @@ class GUIAnalyze(tk.Toplevel):
             bg="#00ADB5",
             highlightthickness=0,
             font=("Roboto", 24 * -1),
+            from_=1,
+            to=20,
         )
-        entry_wordcount.place(
-            x=485.0,
+        spinbox_wordcount.place(
+            x=475.0,
             y=481.0,
-            width=65.0,
+            width=75.0,
             height=56.0
         )
 
-        entry_duplication = tk.Entry(
+        spinbox_duplication = tk.Spinbox(
             self,
             justify="center",
             bd=0,
@@ -139,15 +164,19 @@ class GUIAnalyze(tk.Toplevel):
             bg="#00ADB5",
             highlightthickness=0,
             font=("Roboto", 24 * -1),
+            format="%.2f",
+            increment=0.1,
+            from_=0.1,
+            to=1,
         )
-        entry_duplication.place(
-            x=485.0,
+        spinbox_duplication.place(
+            x=475.0,
             y=558.0,
-            width=65.0,
+            width=75.0,
             height=56.0
         )
 
-        entry_max_keywords = tk.Entry(
+        spinbox_max_keywords = tk.Spinbox(
             self,
             justify="center",
             bd=0,
@@ -155,18 +184,20 @@ class GUIAnalyze(tk.Toplevel):
             bg="#00ADB5",
             highlightthickness=0,
             font=("Roboto", 24 * -1),
+            from_=1,
+            to=100
         )
-        entry_max_keywords.place(
-            x=485.0,
+        spinbox_max_keywords.place(
+            x=475.0,
             y=637.0,
-            width=65.0,
+            width=75.0,
             height=56.0
         )
 
         # Buttons
 
         self.btn_image_analyze_kw = tk.PhotoImage(
-            file=gui_settings.assets("btn_analyze_kw.png"))
+            file=gui_helpers.assets("btn_analyze_keywords.png"))
         btn_analyze_kw = tk.Button(
             self,
             image=self.btn_image_analyze_kw,
@@ -176,9 +207,9 @@ class GUIAnalyze(tk.Toplevel):
                 listbox_keywords.delete(0, tk.END),
                 keywordsanalytics.extract_keywords(
                     textarea_text.get(1.0, tk.END),
-                    1,
-                    0.2,
-                    20,
+                    int(spinbox_wordcount.get()),
+                    float(spinbox_duplication.get()),
+                    int(spinbox_max_keywords.get()),
                     listbox_keywords
                 )
             ),
@@ -192,13 +223,13 @@ class GUIAnalyze(tk.Toplevel):
         )
 
         self.btn_image_pathpicker = tk.PhotoImage(
-            file=gui_settings.assets("btn_pathpicker.png"))
+            file=gui_helpers.assets("btn_pathpicker.png"))
         btn_pathpicker = tk.Button(
             self,
             image=self.btn_image_pathpicker,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: gui_settings.open_textfile(textarea_text),
+            command=lambda: gui_helpers.open_textfile(textarea_text),
             relief="flat"
         )
         btn_pathpicker.place(
@@ -209,30 +240,44 @@ class GUIAnalyze(tk.Toplevel):
         )
 
         self.btn_image_export = tk.PhotoImage(
-            file=gui_settings.assets("btn_export.png"))
-        btn_export = tk.Button(
+            file=gui_helpers.assets("btn_export.png"))
+        btn_export_kw = tk.Button(
             self,
             image=self.btn_image_export,
             borderwidth=0,
             highlightthickness=0,
-           # command=lambda: gui_settings.export_textfile(textarea_keywords),
+            command=lambda: gui_helpers.export_further_listbox(listbox_keywords, listbox_further_keywords),
             relief="flat"
         )
-        btn_export.place(
-            x=950.0,
+        btn_export_kw.place(
+            x=918.9,
+            y=481.0,
+            width=200.0,
+            height=58.0
+        )
+        btn_export_further_kw = tk.Button(
+            self,
+            image=self.btn_image_export,
+            borderwidth=0,
+            highlightthickness=0,
+            command=lambda: gui_helpers.export_kw_listbox(listbox_keywords),
+            relief="flat"
+        )
+        btn_export_further_kw.place(
+            x=681.1,
             y=481.0,
             width=200.0,
             height=58.0
         )
 
         self.btn_image_back = tk.PhotoImage(
-            file=gui_settings.assets("btn_back.png"))
+            file=gui_helpers.assets("btn_back.png"))
         btn_back = tk.Button(
             self,
             image=self.btn_image_back,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: gui_settings.close_window(self),
+            command=lambda: gui_helpers.close_window(self),
             relief="flat"
         )
         btn_back.place(

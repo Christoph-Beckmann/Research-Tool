@@ -1,5 +1,5 @@
 import tkinter as tk
-from gui import gui_settings
+from gui import gui_helpers
 from researchtool import summarization
 
 
@@ -10,7 +10,7 @@ class GUISummarize(tk.Toplevel):
         self_width = 1200
         self_height = 800
 
-        center_x, center_y = gui_settings.center_form(self, self_width, self_height)
+        center_x, center_y = gui_helpers.center_form(self, self_width, self_height)
         self.geometry(f'{self_width}x{self_height}+{center_x}+{center_y}')
         self.title("Research Tool - Summarize")
         self.configure(bg="#EEEEEE")
@@ -96,9 +96,8 @@ class GUISummarize(tk.Toplevel):
             height=602.0
         )
 
-        # Entry
-
-        entry_top = tk.Entry(
+        # Spinbox
+        spinbox_top = tk.Spinbox(
             self,
             justify="center",
             bd=0,
@@ -106,8 +105,10 @@ class GUISummarize(tk.Toplevel):
             bg="#00ADB5",
             highlightthickness=0,
             font=("Roboto", 24 * -1),
+            from_=1,
+            to=50,
         )
-        entry_top.place(
+        spinbox_top.place(
             x=267.0,
             y=716.0,
             width=65.0,
@@ -118,7 +119,7 @@ class GUISummarize(tk.Toplevel):
 
         # Summarize Text
         self.btn_image_summarize = tk.PhotoImage(
-            file=gui_settings.assets("btn_summarize.png")
+            file=gui_helpers.assets("btn_summarize.png")
         )
         btn_summarize = tk.Button(
             self,
@@ -130,7 +131,7 @@ class GUISummarize(tk.Toplevel):
                     ". ".join(
                         summarization.build_summary(
                             textarea_text.get(1.0, tk.END),
-                            gui_settings.is_top_empty(entry_top)
+                            int(spinbox_top.get())
                         )
                     )
                 )
@@ -145,14 +146,14 @@ class GUISummarize(tk.Toplevel):
 
         # Pathpicker
         self.btn_image_pathpicker = tk.PhotoImage(
-            file=gui_settings.assets("btn_pathpicker.png")
+            file=gui_helpers.assets("btn_pathpicker.png")
         )
         btn_pathpicker = tk.Button(
             self,
             image=self.btn_image_pathpicker,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: gui_settings.open_textfile(textarea_text),
+            command=lambda: gui_helpers.open_textfile(textarea_text),
             relief="flat"
         )
         btn_pathpicker.place(
@@ -164,7 +165,7 @@ class GUISummarize(tk.Toplevel):
 
         # Analyze Keywords
         self.btn_image_analyze_kw = tk.PhotoImage(
-            file=gui_settings.assets("btn_analyzekw.png"))
+            file=gui_helpers.assets("btn_analyze_kw.png"))
         btn_analyze_kw = tk.Button(
             self,
             image=self.btn_image_analyze_kw,
@@ -182,14 +183,14 @@ class GUISummarize(tk.Toplevel):
 
         # Export summarized Text
         self.btn_image_export = tk.PhotoImage(
-            file=gui_settings.assets("btn_export.png")
+            file=gui_helpers.assets("btn_export.png")
         )
         btn_export = tk.Button(
             self,
             image=self.btn_image_export,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: gui_settings.export_textfile(textarea_summarized),
+            command=lambda: gui_helpers.export_textarea(textarea_summarized),
             relief="flat"
         )
         btn_export.place(
@@ -201,12 +202,12 @@ class GUISummarize(tk.Toplevel):
 
         # Close Window
         self.btn_image_back = tk.PhotoImage(
-            file=gui_settings.assets("btn_back.png")
+            file=gui_helpers.assets("btn_back.png")
         )
         btn_back = tk.Button(
             self,
             image=self.btn_image_back,
-            command=lambda: gui_settings.close_window(self)
+            command=lambda: gui_helpers.close_window(self)
         )
         btn_back.place(
             x=0.0,
