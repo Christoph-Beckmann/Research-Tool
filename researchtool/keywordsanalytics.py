@@ -1,9 +1,11 @@
 # https://towardsdatascience.com/keyword-extraction-process-in-python-with-natural-language-processing-nlp-d769a9069d5c
-import tkinter as tk
+import logging
 import yake
 from pytrends.request import TrendReq
 from researchtool import helpers
-import matplotlib.pyplot as plot
+import matplotlib.pyplot as plt
+
+logger = logging.getLogger(__name__)
 
 
 def extract_keywords(text, wordcount, duplication, max_keywords):
@@ -17,6 +19,7 @@ def extract_keywords(text, wordcount, duplication, max_keywords):
     )
     keywords = extractor.extract_keywords(text)
     keywords.sort(key=lambda a: a[1])      # Lower Score = the more relevant. For this: Sorting list of tuples of Item 1
+
     return keywords
 
 
@@ -34,16 +37,10 @@ def related_keywords(keyword):
     return list_top_kw
 
 
-def interest_of_time(keyword_list, years):
+def interest_of_time(keyword_list, timeframe):
     trend = TrendReq()
     keywords = keyword_list
-    trend.build_payload(kw_list=keywords, cat=None, timeframe="today " + years + "-y", geo="")
+    trend.build_payload(kw_list=keywords, cat=None, timeframe=timeframe, geo="")
     data = trend.interest_over_time()
-    plot.figure()
-    for i in range(len(keywords)):
-        plot.plot(data[i], data)
-   # plot.plot(data.index, data.Python, "k*")
-    plot.legend("Python")
-    plot.show()
 
-
+    return data

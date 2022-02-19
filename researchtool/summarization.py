@@ -1,3 +1,4 @@
+import logging
 import nltk                                         # Natural Language Toolkit: https://www.nltk.org/
 import ssl                                          # Secure Sockets Layer - Internet Protocol
 from nltk.cluster.util import cosine_distance       # Necessary for calculate Cosine similarity
@@ -5,6 +6,8 @@ from nltk.corpus import stopwords                   # nltk stopwords files
 import numpy as np
 import networkx as nx                               # Network analysis
 import helpers
+
+logger = logging.getLogger(__name__)
 
 
 # Nltk Downloader is broken. There is a workaround to download the required "stopwords" package.
@@ -14,10 +17,10 @@ def install_stopwords():
     try:
         _create_unverified_https_context = ssl._create_unverified_context
     except AttributeError:
-        # Legacy Python that doesn"t verify HTTPS certificates by default
+        # Legacy Python that doesn't verify HTTPS certificates by default
         pass
     else:
-        # Handle target environment that doesn"t support HTTPS verification
+        # Handle target environment that doesn't support HTTPS verification
         ssl._create_default_https_context = _create_unverified_https_context
 
     nltk.download("stopwords")     # Adapted to download only the required package.
@@ -74,7 +77,12 @@ def build_summary(text, top_n=5):
     sentence_similarity_matrix = gen_sim_matrix(sentences, stop_words)
     sentence_similarity_graph = nx.from_numpy_array(sentence_similarity_matrix)
     scores = nx.pagerank(sentence_similarity_graph)
-    ranked_sentence = sorted(((scores[i], s) for i, s in enumerate(sentences)), reverse=True)
+    ranked_sentence = sorted(
+        (
+            (scores[i], s)
+            for i, s in enumerate(sentences)
+        ),
+        reverse=True)
     for i in range(top_n):
         summarized_text.append(" ".join(ranked_sentence[i][1]))
     return summarized_text

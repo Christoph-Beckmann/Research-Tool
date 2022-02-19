@@ -1,6 +1,10 @@
+import logging
 import tkinter as tk
-from gui import gui_helpers
+import gui_helpers
+import gui_plot
 from researchtool import keywordsanalytics
+
+logger = logging.getLogger(__name__)
 
 
 class GUIAnalyze(tk.Toplevel):
@@ -96,7 +100,7 @@ class GUIAnalyze(tk.Toplevel):
             height=377.0
         )
 
-        # Listboxes
+        # List Boxes
 
         listbox_keywords = tk.Listbox(
             self,
@@ -113,7 +117,7 @@ class GUIAnalyze(tk.Toplevel):
 
         # adapted:
         # https://stackoverflow.com/questions/7616541/get-selected-item-in-listbox-and-call-another-function-storing-the-selected-for
-        def on_select(event):
+        def on_select_listbox_kw(event):
             widget = event.widget
             selection_item = widget.curselection()
             selection = widget.get(selection_item[0])
@@ -121,7 +125,7 @@ class GUIAnalyze(tk.Toplevel):
 
         listbox_keywords.bind(
             "<<ListboxSelect>>",
-            on_select
+            on_select_listbox_kw
         )
 
         listbox_further_keywords = tk.Listbox(
@@ -195,22 +199,21 @@ class GUIAnalyze(tk.Toplevel):
             height=56.0
         )
 
-        spinbox_years = tk.Spinbox(
+        # Dropdown
+        clicked = tk.StringVar()
+        clicked.set("today 5-y")
+        dropdown = tk.OptionMenu(
             self,
-            justify="center",
-            bd=0,
-            fg="#00ADB5",
-            bg="#EEEEEE",
-            highlightthickness=0,
-            font=("Roboto", 24 * -1),
-            from_=1,
-            to=100
+            clicked,
+            "today 5-y",
+            "today 12-m",
+            "today 3-m",
+            "today 1-m",
         )
-        spinbox_years.place(
-            x=1085.0,
-            y=566.0,
-            width=65.0,
-            height=56.0
+        dropdown.place(
+            x=1040.0,
+            y=580.0,
+            width=110.0,
         )
 
         # Buttons
@@ -299,9 +302,13 @@ class GUIAnalyze(tk.Toplevel):
             borderwidth=0,
             highlightthickness=0,
             command=lambda: (
-                keywordsanalytics.interest_of_time(
-                    gui_helpers.get_selection(listbox_further_keywords),
-                    int(spinbox_years.get())
+                gui_plot.GUIPlot(
+                    self,
+                    keywordsanalytics.interest_of_time(
+                        gui_helpers.get_selection(listbox_further_keywords),    # Get list of selected listbox Items
+                        clicked.get()                                           # Dropdown selected Item: Timeframe
+                    ),
+                    gui_helpers.get_selection(listbox_further_keywords)
                 )
             ),
             relief="flat"
@@ -312,6 +319,7 @@ class GUIAnalyze(tk.Toplevel):
             width=365.0,
             height=59.0
         )
+
 
         self.btn_image_back = tk.PhotoImage(
             file=gui_helpers.assets("btn_back.png"))

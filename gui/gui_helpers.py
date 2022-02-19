@@ -1,4 +1,5 @@
 import sys
+import logging
 import tkinter
 from pathlib import Path
 import tkinter as tk
@@ -6,11 +7,14 @@ from tkinter import filedialog as fd
 import csv
 from researchtool import keywordsanalytics
 
+logger = logging.getLogger(__name__)
+
 PROJECT_DIR = Path(__file__).parents[1]
 sys.path.append(str(PROJECT_DIR / Path("./researchtool")))  # System Path of backend is included - really necessary?
 
 
 def assets(path: str) -> Path:
+
     return PROJECT_DIR / Path("./gui/assets") / Path(path)
 
 
@@ -23,6 +27,7 @@ def center_form(form: tk, form_width: int, form_height: int):
     screen_height = form.winfo_screenheight()
     x_coordinate = (screen_width / 2) - (form_width / 2)
     y_coordinate = (screen_height / 2) - (form_height / 2)
+
     return int(x_coordinate), int(y_coordinate)
 
 
@@ -30,6 +35,7 @@ def filetypes_dialogs():
     filetypes = \
         ("All Files", "*.*"), \
         ("Text Documents", "*.txt")
+
     return filetypes
 
 
@@ -40,11 +46,10 @@ def open_textfile(textarea: tk.Text):
     if file is None:
         return
     else:
-        fob = open(file, "r")
-        text = fob.read()
+        with open(file, "r") as f:
+            text = f.read()
         textarea.delete(1.0, tk.END)
         textarea.insert(tk.INSERT, text)
-        fob.close()
 
 
 def insert_kw(listbox: tkinter.Listbox, keywords):
@@ -65,6 +70,7 @@ def insert_related_kw(listbox: tkinter.Listbox, selection):
 
 def get_selection(listbox: tkinter.Listbox):
     selection_list = [listbox.get(i) for i in listbox.curselection()]
+
     return selection_list
 
 
@@ -80,6 +86,15 @@ def export_textarea(textarea: tk.Text):
         text = str(textarea.get(1.0, tk.END))
         with open(file, "w") as file:
             file.write(text)
+
+
+def change_state(button: tk.Button) -> None:
+    print("normal")
+    if button.config(state=tk.DISABLED):
+        print("normalized")
+        button["state"] = tk.NORMAL
+    else:
+        button["state"] = tk.NORMAL
 
 
 def export_kw_listbox(listbox: tk.Listbox):

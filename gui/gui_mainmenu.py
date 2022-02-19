@@ -1,18 +1,21 @@
+import logging
 import tkinter as tk
+import gui_analyze
 import gui_helpers
 import gui_summarize
-import gui_analyze
+
+logger = logging.getLogger(__name__)
 
 
 # With help from this side: https://www.pythontutorial.net/tk/tk-toplevel/
 # and this forum with own created problem: https://www.python-forum.de/viewtopic.php?f=18&t=54087
-
 class GUIMainMenu(tk.Tk):
     def __init__(self):
         super().__init__()
 
         self_width = 800
         self_height = 500
+
         center_x, center_y = gui_helpers.center_form(self, self_width, self_height)
         self.geometry(f"{self_width}x{self_height}+{center_x}+{center_y}")
         self.title("Research Tool")
@@ -51,7 +54,7 @@ class GUIMainMenu(tk.Tk):
         )
         
         self.image_checkbox = tk.PhotoImage(
-            file=gui_helpers.assets("checkbox.png")
+            file=gui_helpers.assets("img_checkbox.png")
         )
 
         canvas.create_image(
@@ -71,11 +74,15 @@ class GUIMainMenu(tk.Tk):
             340.0,
             image=self.image_checkbox
         )
-        
+
+        self.image_no = tk.PhotoImage(
+            file=gui_helpers.assets("img_no.png")
+        )
+
         canvas.create_image(
             96.0,
             406.0,
-            image=self.image_checkbox
+            image=self.image_no
         )
         
         canvas.create_text(
@@ -186,8 +193,9 @@ class GUIMainMenu(tk.Tk):
             image=self.btn_image_Research,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print("Research pressed"),
-            relief="flat"
+            command=lambda: gui_helpers.logging(btn_research["state"]),
+            relief="flat",
+            state="disabled"
         )
         btn_research.place(
             x=500.0,
@@ -229,5 +237,9 @@ class GUIMainMenu(tk.Tk):
 
 
 if __name__ == "__main__":
+    import logging.config
+    logging_config = gui_helpers.PROJECT_DIR / "logging.conf"
+    logging.config.fileConfig(logging_config, disable_existing_loggers=False)
+
     mainmenu = GUIMainMenu()
     mainmenu.mainloop()

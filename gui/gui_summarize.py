@@ -1,6 +1,9 @@
+import logging
 import tkinter as tk
 from gui import gui_helpers
 from researchtool import summarization
+
+logger = logging.getLogger(__name__)
 
 
 class GUISummarize(tk.Toplevel):
