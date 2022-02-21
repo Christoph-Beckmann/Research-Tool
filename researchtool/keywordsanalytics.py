@@ -1,9 +1,7 @@
-# https://towardsdatascience.com/keyword-extraction-process-in-python-with-natural-language-processing-nlp-d769a9069d5c
 import logging
 import yake
 from pytrends.request import TrendReq
 from researchtool import helpers
-import matplotlib.pyplot as plt
 
 logger = logging.getLogger(__name__)
 

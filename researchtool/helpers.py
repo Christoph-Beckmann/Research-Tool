@@ -4,8 +4,8 @@ import iso639                                       # Transform ISO639-1 to ISO 
 
 # Automatic detection of the language and conversion from "de" to "Deutsch" using the packages Langdetect and ISO639.
 def detectlanguage(text, short: bool):
-    if short:
+    if short:                                       # Deutsch to de
         language = iso639.to_name(detect(text))
     else:
-        language = detect(text)
+        language = detect(text)                     # Deutsch
     return language

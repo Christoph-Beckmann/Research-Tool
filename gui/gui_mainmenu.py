@@ -1,8 +1,8 @@
 import logging
 import tkinter as tk
-import gui_analyze
-import gui_helpers
-import gui_summarize
+from gui import gui_summarize
+from gui import gui_helpers
+from gui import gui_analyze
 
 logger = logging.getLogger(__name__)
 
@@ -193,7 +193,7 @@ class GUIMainMenu(tk.Tk):
             image=self.btn_image_Research,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: gui_helpers.logging(btn_research["state"]),
+            command=lambda: logger.info(btn_research["state"]),
             relief="flat",
             state="disabled"
         )

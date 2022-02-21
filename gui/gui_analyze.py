@@ -1,7 +1,7 @@
 import logging
 import tkinter as tk
-import gui_helpers
-import gui_plot
+from gui import gui_helpers
+from gui import gui_plot
 from researchtool import keywordsanalytics
 
 logger = logging.getLogger(__name__)
@@ -118,10 +118,13 @@ class GUIAnalyze(tk.Toplevel):
         # adapted:
         # https://stackoverflow.com/questions/7616541/get-selected-item-in-listbox-and-call-another-function-storing-the-selected-for
         def on_select_listbox_kw(event):
-            widget = event.widget
-            selection_item = widget.curselection()
-            selection = widget.get(selection_item[0])
-            gui_helpers.insert_related_kw(listbox_further_keywords, selection)
+            try:
+                widget = event.widget
+                selection_item = widget.curselection()
+                selection = widget.get(selection_item[0])
+                gui_helpers.insert_related_kw(listbox_further_keywords, selection)
+            except Exception as error:
+                logger.error(error)
 
         listbox_keywords.bind(
             "<<ListboxSelect>>",
@@ -301,15 +304,9 @@ class GUIAnalyze(tk.Toplevel):
             image=self.btn_image_get_historical,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: (
-                gui_plot.GUIPlot(
-                    self,
-                    keywordsanalytics.interest_of_time(
-                        gui_helpers.get_selection(listbox_further_keywords),    # Get list of selected listbox Items
-                        clicked.get()                                           # Dropdown selected Item: Timeframe
-                    ),
-                    gui_helpers.get_selection(listbox_further_keywords)
-                )
+            command=lambda: self.open_gui_plot(
+                gui_helpers.get_selection(listbox_further_keywords),  # Get list of selected listbox Items
+                clicked.get()  # Dropdown selected Item: Timeframe
             ),
             relief="flat"
         )
@@ -319,7 +316,6 @@ class GUIAnalyze(tk.Toplevel):
             width=365.0,
             height=59.0
         )
-
 
         self.btn_image_back = tk.PhotoImage(
             file=gui_helpers.assets("btn_back.png"))
@@ -339,3 +335,15 @@ class GUIAnalyze(tk.Toplevel):
         )
 
         self.resizable(False, False)
+
+    def open_gui_plot(self, list_sel, dropdown_sel):
+        form_plot = gui_plot.GUIPlot(
+            self,
+            keywordsanalytics.interest_of_time(
+                list_sel,
+                dropdown_sel
+            ),
+            list_sel
+        )
+        form_plot.grab_set()
+

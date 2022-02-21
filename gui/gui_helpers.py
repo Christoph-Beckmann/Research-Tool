@@ -13,6 +13,7 @@ PROJECT_DIR = Path(__file__).parents[1]
 sys.path.append(str(PROJECT_DIR / Path("./researchtool")))  # System Path of backend is included - really necessary?
 
 
+# Relative Asset Path
 def assets(path: str) -> Path:
 
     return PROJECT_DIR / Path("./gui/assets") / Path(path)
@@ -31,26 +32,7 @@ def center_form(form: tk, form_width: int, form_height: int):
     return int(x_coordinate), int(y_coordinate)
 
 
-def filetypes_dialogs():
-    filetypes = \
-        ("All Files", "*.*"), \
-        ("Text Documents", "*.txt")
-
-    return filetypes
-
-
-def open_textfile(textarea: tk.Text):
-    file = fd.askopenfilename(
-        filetypes=[("All Files", "*.*"), ("Text Documents", "*.txt")],
-        defaultextension=".txt")
-    if file is None:
-        return
-    else:
-        with open(file, "r") as f:
-            text = f.read()
-        textarea.delete(1.0, tk.END)
-        textarea.insert(tk.INSERT, text)
-
+# Listbox Operations
 
 def insert_kw(listbox: tkinter.Listbox, keywords):
     s = 0
@@ -74,20 +56,6 @@ def get_selection(listbox: tkinter.Listbox):
     return selection_list
 
 
-def export_textarea(textarea: tk.Text):
-    file = fd.asksaveasfilename(
-        initialfile="Untitled.txt",
-        filetypes=[("All Files", "*.*"), ("Text Documents", "*.txt")],
-        defaultextension=".txt"
-    )
-    if file is None:
-        return
-    else:
-        text = str(textarea.get(1.0, tk.END))
-        with open(file, "w") as file:
-            file.write(text)
-
-
 def change_state(button: tk.Button) -> None:
     print("normal")
     if button.config(state=tk.DISABLED):
@@ -97,38 +65,84 @@ def change_state(button: tk.Button) -> None:
         button["state"] = tk.NORMAL
 
 
+# File Dialogs
+
+# Summary - Open Textfile
+def open_textfile(textarea: tk.Text):
+    try:
+        file = fd.askopenfilename(
+            filetypes=[("All Files", "*.*"), ("Text Documents", "*.txt")],
+            defaultextension=".txt")
+        if file is None:
+            return
+        else:
+            with open(file, "r") as f:
+                text = f.read()
+            textarea.delete(1.0, tk.END)
+            textarea.insert(tk.INSERT, text)
+    except Exception as error:
+        logger.error(error)
+
+
+# Summary - Export Summary
+def export_textarea(textarea: tk.Text):
+    try:
+        file = fd.asksaveasfilename(
+            initialfile="Untitled.txt",
+            filetypes=[("All Files", "*.*"), ("Text Documents", "*.txt")],
+            defaultextension=".txt"
+        )
+        if file is None:
+            return
+        else:
+            text = str(textarea.get(1.0, tk.END))
+            with open(file, "w") as file:
+                file.write(text)
+    except Exception as error:
+        logger.error(error)
+
+
+# Analysis - Export extracted keywords
 def export_kw_listbox(listbox: tk.Listbox):
-    csvfile = fd.asksaveasfilename(
-        initialfile="Untitled.csv",
-        filetypes=[("All Files", "*.*"), ("CSV", "*.csv")],
-        defaultextension=".csv"
-    )
-    if csvfile is None:
-        return
-    else:
-        items = listbox.get(0, tk.END)
-        items = ("Keywords", ) + items
-        with open(csvfile, "w", newline="") as csvfile:
-            writer = csv.writer(csvfile, delimiter="\n")
-            writer.writerow(items)
+    try:
+        csvfile = fd.asksaveasfilename(
+            initialfile="Untitled.csv",
+            filetypes=[("All Files", "*.*"), ("CSV", "*.csv")],
+            defaultextension=".csv"
+        )
+        if csvfile is None:
+            return
+        else:
+            items = listbox.get(0, tk.END)
+            items = ("Keywords", ) + items
+            with open(csvfile, "w", newline="") as csvfile:
+                writer = csv.writer(csvfile, delimiter="\n")
+                writer.writerow(items)
+    except Exception as error:
+        logger.error(error)
 
 
+# Analysis - Export further related keywords
 def export_further_listbox(listbox_kw: tk.Listbox, listbox_further: tk.Listbox):
-    csvfile = fd.asksaveasfilename(
-        initialfile="Untitled.csv",
-        filetypes=[("All Files", "*.*"), ("CSV", "*.csv")],
-        defaultextension=".csv"
-    )
-    if csvfile is None:
-        return
-    else:
-        items = listbox_further.get(0, tk.END)
-        current_selection = listbox_kw.get(listbox_kw.curselection())
-        items = (f"{current_selection}", ) + items
-        with open(csvfile, "w", newline="") as csvfile:
-            writer = csv.writer(csvfile, delimiter="\n")
-            writer.writerow(items)
+    try:
+        csvfile = fd.asksaveasfilename(
+            initialfile="Untitled.csv",
+            filetypes=[("All Files", "*.*"), ("CSV", "*.csv")],
+            defaultextension=".csv"
+        )
+        if csvfile is None:
+            return
+        else:
+            items = listbox_further.get(0, tk.END)
+            current_selection = listbox_kw.get(listbox_kw.curselection())
+            items = (f"{current_selection}", ) + items
+            with open(csvfile, "w", newline="") as csvfile:
+                writer = csv.writer(csvfile, delimiter="\n")
+                writer.writerow(items)
+    except Exception as error:
+        logger.error(error)
 
 
+# Close Window Function
 def close_window(self):
     self.destroy()
