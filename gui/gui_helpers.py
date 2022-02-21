@@ -1,6 +1,5 @@
 import sys
 import logging
-import tkinter
 from pathlib import Path
 import tkinter as tk
 from tkinter import filedialog as fd
@@ -34,14 +33,14 @@ def center_form(form: tk, form_width: int, form_height: int):
 
 # Listbox Operations
 
-def insert_kw(listbox: tkinter.Listbox, keywords):
+def insert_kw(listbox: tk.Listbox, keywords):
     s = 0
     for i in keywords:
         listbox.insert(s, i[0])
         s += 1
 
 
-def insert_related_kw(listbox: tkinter.Listbox, selection):
+def insert_related_kw(listbox: tk.Listbox, selection):
     keywords = keywordsanalytics.related_keywords(selection)
     listbox.delete(0, tk.END)
     s = 0
@@ -50,7 +49,7 @@ def insert_related_kw(listbox: tkinter.Listbox, selection):
         s += 1
 
 
-def get_selection(listbox: tkinter.Listbox):
+def get_selection(listbox: tk.Listbox):
     selection_list = [listbox.get(i) for i in listbox.curselection()]
 
     return selection_list

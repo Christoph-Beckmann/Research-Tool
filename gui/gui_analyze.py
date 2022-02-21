@@ -175,7 +175,7 @@ class GUIAnalyze(tk.Toplevel):
             format="%.2f",
             increment=0.1,
             from_=0.1,
-            to=1,
+            to=0.99,
         )
         spinbox_duplication.place(
             x=475.0,

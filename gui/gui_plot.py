@@ -10,15 +10,15 @@ class GUIPlot(tk.Toplevel):
     def __init__(self, parent, data, keywords):
         super().__init__(parent)
 
-        self_width = 450
-        self_height = 350
+        self_width = 600
+        self_height = 600
         self.geometry(f"{self_width}x{self_height}")
         self.title("Research Tool - Figure")
         self.configure(bg="#EEEEEE")
 
         self.plot(data, keywords)
 
-        self.resizable(False, False)
+        self.resizable(True, True)
 
     def plot(self, data, keywords):
         figure = Figure()
