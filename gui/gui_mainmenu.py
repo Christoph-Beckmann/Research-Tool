@@ -1,27 +1,31 @@
 import logging
 import tkinter as tk
 from gui import gui_summarize
-from gui import gui_helpers
+from gui import gui_helpers as helper
 from gui import gui_analyze
 
 logger = logging.getLogger(__name__)
 
 
-# With help from this side: https://www.pythontutorial.net/tk/tk-toplevel/
-# and this forum with own created problem: https://www.python-forum.de/viewtopic.php?f=18&t=54087
 class GUIMainMenu(tk.Tk):
+    """
+    Class for create the main Form
+    """
     def __init__(self):
+        """
+        Constructor for GUIMainMenu class
+        """
         super().__init__()
 
         self_width = 800
         self_height = 500
 
-        center_x, center_y = gui_helpers.center_form(self, self_width, self_height)
+        center_x, center_y = helper.center_form(self, self_width, self_height)     # Get center coordinates
         self.geometry(f"{self_width}x{self_height}+{center_x}+{center_y}")
         self.title("Research Tool")
         self.configure(bg="#EEEEEE")
 
-        # Background Canvas
+        # *Build Canvas*
 
         canvas = tk.Canvas(
             self,
@@ -42,7 +46,7 @@ class GUIMainMenu(tk.Tk):
             fill="#00ADB5",
             outline="")
         
-        # Title, Description (Texts) and Images on Left Side
+        # *Title, Description (Texts) and Images on Left Side*
         
         canvas.create_text(
             50.0,
@@ -54,7 +58,7 @@ class GUIMainMenu(tk.Tk):
         )
         
         self.image_checkbox = tk.PhotoImage(
-            file=gui_helpers.assets("img_checkbox.png")
+            file=helper.assets("img_checkbox.png")
         )
 
         canvas.create_image(
@@ -76,7 +80,7 @@ class GUIMainMenu(tk.Tk):
         )
 
         self.image_no = tk.PhotoImage(
-            file=gui_helpers.assets("img_no.png")
+            file=helper.assets("img_no.png")
         )
 
         canvas.create_image(
@@ -141,11 +145,11 @@ class GUIMainMenu(tk.Tk):
             font=("Roboto", 36 * -1)
         )
         
-        # Buttons
+        # *Buttons*
 
         # Summarized
         self.btn_image_Summarize = tk.PhotoImage(
-            file=gui_helpers.assets("btn_Summarize.png")
+            file=helper.assets("btn_Summarize.png")
         )
         
         btn_summarize = tk.Button(
@@ -165,7 +169,7 @@ class GUIMainMenu(tk.Tk):
 
         # Keyword Analysis
         self.btn_image_Analyze = tk.PhotoImage(
-            file=gui_helpers.assets("btn_Analyze.png")
+            file=helper.assets("btn_Analyze.png")
         )
         btn_analyze = tk.Button(
             self,
@@ -185,7 +189,7 @@ class GUIMainMenu(tk.Tk):
 
         # Further Research
         self.btn_image_Research = tk.PhotoImage(
-            file=gui_helpers.assets("btn_Research.png")
+            file=helper.assets("btn_Research.png")
         )
 
         btn_research = tk.Button(
@@ -205,7 +209,7 @@ class GUIMainMenu(tk.Tk):
         )
 
         self.btn_image_exit = tk.PhotoImage(
-            file=gui_helpers.assets("btn_back.png"))
+            file=helper.assets("btn_back.png"))
 
         # Close Form
         btn_exit = tk.Button(
@@ -213,7 +217,7 @@ class GUIMainMenu(tk.Tk):
             image=self.btn_image_exit,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: gui_helpers.close_window(self),
+            command=lambda: helper.close_window(self),
             relief="flat"
         )
         btn_exit.place(
@@ -228,18 +232,30 @@ class GUIMainMenu(tk.Tk):
     # Functions to call TopLevel Windows
 
     def open_gui_summarize(self):
+        """
+        Function to open TopLevel GUI Summarize
+        """
         form_summarize = gui_summarize.GUISummarize(self)
         form_summarize.grab_set()
 
     def open_gui_analyze(self):
+        """
+        Function to open TopLevel GUI Analyze
+        """
         form_analyze = gui_analyze.GUIAnalyze(self)
         form_analyze.grab_set()
 
+########################################################################################################################
+
 
 if __name__ == "__main__":
+    # Set special variables. Python interpreter reads this first.
+    # Prevent parts of code from being run when the modules are imported.
+    # To get a deeper insight I used logging Package for debug, info and warning messages.
     import logging.config
-    logging_config = gui_helpers.PROJECT_DIR / "logging.conf"
+    logging_config = helper.PROJECT_DIR / "logging.conf"
     logging.config.fileConfig(logging_config, disable_existing_loggers=False)
 
+    # Create Class
     mainmenu = GUIMainMenu()
     mainmenu.mainloop()

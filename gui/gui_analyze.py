@@ -1,25 +1,35 @@
 import logging
 import tkinter as tk
-from gui import gui_helpers
+from gui import gui_helpers as helper
 from gui import gui_plot
-from researchtool import keywordsanalytics
+from researchtool.keywordsanalytics import related_keywords as rel_kw
+from researchtool.keywordsanalytics import extract_keywords as ex_kw
+from researchtool.keywordsanalytics import interest_of_time as interest
 
 logger = logging.getLogger(__name__)
 
 
 class GUIAnalyze(tk.Toplevel):
+    """
+    Class for create the main Form
+    # With help from this side: https://www.pythontutorial.net/tkinter/tkinter-toplevel/
+    and this forum with own created problem: https://www.python-forum.de/viewtopic.php?f=18&t=54087
+    """
     def __init__(self, parent):
+        """
+        Constructor for GUIAnalyze class
+        """
         super().__init__(parent)
 
         self_width = 1200
         self_height = 800
 
-        center_x, center_y = gui_helpers.center_form(self, self_width, self_height)
+        center_x, center_y = helper.center_form(self, self_width, self_height)
         self.geometry(f"{self_width}x{self_height}+{center_x}+{center_y}")
         self.title("Research Tool - Keywords Analysis")
         self.configure(bg="#EEEEEE")
 
-        # Build Canvas
+        # *Build Canvas*
 
         canvas = tk.Canvas(
             self,
@@ -41,7 +51,7 @@ class GUIAnalyze(tk.Toplevel):
             fill="#00ADB5",
             outline="")
 
-        # Labels
+        # *Labels*
 
         canvas.create_text(
             207.0,
@@ -84,7 +94,7 @@ class GUIAnalyze(tk.Toplevel):
             font=("Roboto", 24 * -1)
         )
 
-        # TextArea
+        # *TextArea*
 
         textarea_text = tk.Text(
             self,
@@ -100,7 +110,7 @@ class GUIAnalyze(tk.Toplevel):
             height=377.0
         )
 
-        # List Boxes
+        # *List Boxes*
 
         listbox_keywords = tk.Listbox(
             self,
@@ -117,15 +127,20 @@ class GUIAnalyze(tk.Toplevel):
 
         # adapted:
         # https://stackoverflow.com/questions/7616541/get-selected-item-in-listbox-and-call-another-function-storing-the-selected-for
+        # Click Event, if listbox is clicked get related kw from selected kw and insert it to listbox
         def on_select_listbox_kw(event):
             try:
                 widget = event.widget
                 selection_item = widget.curselection()
                 selection = widget.get(selection_item[0])
-                gui_helpers.insert_related_kw(listbox_further_keywords, selection)
+                helper.insert_related_kw(
+                    listbox_further_keywords,
+                    rel_kw(selection)   # List of related keywords
+                )
             except Exception as error:
                 logger.error(error)
 
+        # Bind on_select_listbox_kw function to ListBoxSelect Event
         listbox_keywords.bind(
             "<<ListboxSelect>>",
             on_select_listbox_kw
@@ -220,19 +235,18 @@ class GUIAnalyze(tk.Toplevel):
         )
 
         # Buttons
-
+        # Extract with parameters important keywords and insert them to listbox_keywords
         self.btn_image_analyze_kw = tk.PhotoImage(
-            file=gui_helpers.assets("btn_analyze_keywords.png"))
+            file=helper.assets("btn_analyze_keywords.png"))
         btn_analyze_kw = tk.Button(
             self,
             image=self.btn_image_analyze_kw,
             borderwidth=0,
             highlightthickness=0,
             command=lambda: (
-                listbox_keywords.delete(0, tk.END),
-                gui_helpers.insert_kw(
+                helper.insert_kw(
                     listbox_keywords,
-                    keywordsanalytics.extract_keywords(
+                    ex_kw(
                         textarea_text.get(1.0, tk.END),
                         int(spinbox_wordcount.get()),
                         float(spinbox_duplication.get()),
@@ -250,13 +264,13 @@ class GUIAnalyze(tk.Toplevel):
         )
 
         self.btn_image_pathpicker = tk.PhotoImage(
-            file=gui_helpers.assets("btn_pathpicker.png"))
+            file=helper.assets("btn_pathpicker.png"))
         btn_pathpicker = tk.Button(
             self,
             image=self.btn_image_pathpicker,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: gui_helpers.open_textfile(textarea_text),
+            command=lambda: helper.open_textfile(textarea_text),
             relief="flat"
         )
         btn_pathpicker.place(
@@ -267,13 +281,13 @@ class GUIAnalyze(tk.Toplevel):
         )
 
         self.btn_image_export = tk.PhotoImage(
-            file=gui_helpers.assets("btn_export.png"))
+            file=helper.assets("btn_export.png"))
         btn_export_kw = tk.Button(
             self,
             image=self.btn_image_export,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: gui_helpers.export_further_listbox(listbox_keywords, listbox_further_keywords),
+            command=lambda: helper.export_further_listbox(listbox_keywords, listbox_further_keywords),
             relief="flat"
         )
         btn_export_kw.place(
@@ -287,7 +301,7 @@ class GUIAnalyze(tk.Toplevel):
             image=self.btn_image_export,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: gui_helpers.export_kw_listbox(listbox_keywords),
+            command=lambda: helper.export_kw_listbox(listbox_keywords),
             relief="flat"
         )
         btn_export_further_kw.place(
@@ -298,14 +312,14 @@ class GUIAnalyze(tk.Toplevel):
         )
 
         self.btn_image_get_historical = tk.PhotoImage(
-            file=gui_helpers.assets("btn_get_historical.png"))
+            file=helper.assets("btn_get_historical.png"))
         btn_get_historical = tk.Button(
             self,
             image=self.btn_image_get_historical,
             borderwidth=0,
             highlightthickness=0,
             command=lambda: self.open_gui_plot(
-                gui_helpers.get_selection(listbox_further_keywords),  # Get list of selected listbox Items
+                helper.get_selection(listbox_further_keywords),  # Get list of selected listbox Items
                 clicked.get()  # Dropdown selected Item: Timeframe
             ),
             relief="flat"
@@ -318,13 +332,13 @@ class GUIAnalyze(tk.Toplevel):
         )
 
         self.btn_image_back = tk.PhotoImage(
-            file=gui_helpers.assets("btn_back.png"))
+            file=helper.assets("btn_back.png"))
         btn_back = tk.Button(
             self,
             image=self.btn_image_back,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: gui_helpers.close_window(self),
+            command=lambda: helper.close_window(self),
             relief="flat"
         )
         btn_back.place(
@@ -337,9 +351,14 @@ class GUIAnalyze(tk.Toplevel):
         self.resizable(False, False)
 
     def open_gui_plot(self, list_sel, dropdown_sel):
+        """
+        Function to open TopLevel GUI Plot with parameters
+        :param list_sel: List of selected keywords
+        :param dropdown_sel: Selected dropdown Item "timeframe"
+        """
         form_plot = gui_plot.GUIPlot(
             self,
-            keywordsanalytics.interest_of_time(
+            interest(
                 list_sel,
                 dropdown_sel
             ),

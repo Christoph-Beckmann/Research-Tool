@@ -1,24 +1,32 @@
 import logging
 import tkinter as tk
-from gui import gui_helpers
-from researchtool import summarization
+from gui import gui_helpers as helper
+from researchtool.summarization import build_summary
 
 logger = logging.getLogger(__name__)
 
 
 class GUISummarize(tk.Toplevel):
+    """
+    Class for create the main Form
+    # With help from this side: https://www.pythontutorial.net/tkinter/tkinter-toplevel/
+    and this forum with own created problem: https://www.python-forum.de/viewtopic.php?f=18&t=54087
+    """
     def __init__(self, parent):
+        """
+        Constructor for GUISummarize class
+        """
         super().__init__(parent)
 
         self_width = 1200
         self_height = 800
 
-        center_x, center_y = gui_helpers.center_form(self, self_width, self_height)
+        center_x, center_y = helper.center_form(self, self_width, self_height)  # Get center coordinates
         self.geometry(f"{self_width}x{self_height}+{center_x}+{center_y}")
         self.title("Research Tool - Summarize")
         self.configure(bg="#EEEEEE")
 
-        # Build Canvas
+        # *Build Canvas*
 
         canvas = tk.Canvas(
             self,
@@ -100,6 +108,7 @@ class GUISummarize(tk.Toplevel):
         )
 
         # Spinbox
+
         spinbox_top = tk.Spinbox(
             self,
             justify="center",
@@ -118,12 +127,13 @@ class GUISummarize(tk.Toplevel):
             height=56.0
         )
 
-        # Buttons
+        # *Buttons*
 
         # Summarize Text
         self.btn_image_summarize = tk.PhotoImage(
-            file=gui_helpers.assets("btn_summarize.png")
+            file=helper.assets("btn_summarize.png")
         )
+        # Lambda Function Tuples. 1) Delete Textarea 2) Insert summarized text from build_summary function
         btn_summarize = tk.Button(
             self,
             image=self.btn_image_summarize,
@@ -132,7 +142,7 @@ class GUISummarize(tk.Toplevel):
                 textarea_summarized.insert(
                     1.0,
                     ". ".join(
-                        summarization.build_summary(
+                        build_summary(
                             textarea_text.get(1.0, tk.END),
                             int(spinbox_top.get())
                         )
@@ -149,14 +159,14 @@ class GUISummarize(tk.Toplevel):
 
         # Pathpicker
         self.btn_image_pathpicker = tk.PhotoImage(
-            file=gui_helpers.assets("btn_pathpicker.png")
+            file=helper.assets("btn_pathpicker.png")
         )
         btn_pathpicker = tk.Button(
             self,
             image=self.btn_image_pathpicker,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: gui_helpers.open_textfile(textarea_text),
+            command=lambda: helper.open_textfile(textarea_text),
             relief="flat"
         )
         btn_pathpicker.place(
@@ -168,7 +178,7 @@ class GUISummarize(tk.Toplevel):
 
         # Analyze Keywords
         self.btn_image_analyze_kw = tk.PhotoImage(
-            file=gui_helpers.assets("btn_analyze_kw.png"))
+            file=helper.assets("btn_analyze_kw.png"))
         btn_analyze_kw = tk.Button(
             self,
             image=self.btn_image_analyze_kw,
@@ -186,14 +196,14 @@ class GUISummarize(tk.Toplevel):
 
         # Export summarized Text
         self.btn_image_export = tk.PhotoImage(
-            file=gui_helpers.assets("btn_export.png")
+            file=helper.assets("btn_export.png")
         )
         btn_export = tk.Button(
             self,
             image=self.btn_image_export,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: gui_helpers.export_textarea(textarea_summarized),
+            command=lambda: helper.export_textarea(textarea_summarized),
             relief="flat"
         )
         btn_export.place(
@@ -205,12 +215,12 @@ class GUISummarize(tk.Toplevel):
 
         # Close Window
         self.btn_image_back = tk.PhotoImage(
-            file=gui_helpers.assets("btn_back.png")
+            file=helper.assets("btn_back.png")
         )
         btn_back = tk.Button(
             self,
             image=self.btn_image_back,
-            command=lambda: gui_helpers.close_window(self)
+            command=lambda: helper.close_window(self)
         )
         btn_back.place(
             x=0.0,
