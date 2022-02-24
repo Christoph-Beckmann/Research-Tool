@@ -3,6 +3,7 @@ import tkinter as tk
 from gui import gui_summarize
 from gui import gui_helpers as helper
 from gui import gui_analyze
+from gui import gui_research
 
 logger = logging.getLogger(__name__)
 
@@ -78,15 +79,11 @@ class GUIMainMenu(tk.Tk):
             340.0,
             image=self.image_checkbox
         )
-
-        self.image_no = tk.PhotoImage(
-            file=helper.assets("img_no.png")
-        )
-
         canvas.create_image(
             96.0,
             406.0,
-            image=self.image_no
+            image=self.image_checkbox
+
         )
         
         canvas.create_text(
@@ -197,9 +194,8 @@ class GUIMainMenu(tk.Tk):
             image=self.btn_image_Research,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: logger.info(btn_research["state"]),
-            relief="flat",
-            state="disabled"
+            command=lambda: self.open_gui_research(),
+            relief="flat"
         )
         btn_research.place(
             x=500.0,
@@ -244,6 +240,14 @@ class GUIMainMenu(tk.Tk):
         """
         form_analyze = gui_analyze.GUIAnalyze(self)
         form_analyze.grab_set()
+
+    def open_gui_research(self):
+        """
+        Function to open TopLevel GUI Research
+        """
+        form_research = gui_research.GUIResearch(self)
+        form_research.grab_set()
+
 
 ########################################################################################################################
 

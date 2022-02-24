@@ -176,24 +176,6 @@ class GUISummarize(tk.Toplevel):
             height=58.0
         )
 
-        # Analyze Keywords
-        self.btn_image_analyze_kw = tk.PhotoImage(
-            file=helper.assets("btn_analyze_kw.png"))
-        btn_analyze_kw = tk.Button(
-            self,
-            image=self.btn_image_analyze_kw,
-            borderwidth=0,
-            highlightthickness=0,
-            command=lambda: print("Analyze Keywords pressed"),
-            relief="flat"
-        )
-        btn_analyze_kw.place(
-            x=649.0,
-            y=716.0,
-            width=200.0,
-            height=58.0
-        )
-
         # Export summarized Text
         self.btn_image_export = tk.PhotoImage(
             file=helper.assets("btn_export.png")
