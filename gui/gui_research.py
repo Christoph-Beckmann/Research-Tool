@@ -1,7 +1,6 @@
 import logging
 import tkinter as tk
 from tkinter import ttk
-
 import gui_helpers
 from gui import gui_helpers as helper
 from helpers import detectlanguage
@@ -42,6 +41,25 @@ class GUIResearch(tk.Toplevel):
         keys = ("title", "publication_info", "snippet", "title_link")
         tree = ttk.Treeview(self, columns=keys, show="headings")
 
+        # Entry Query Search
+
+        entry_query = tk.Entry(
+            self,
+            bd=0,
+            bg="#EEEEEE",
+            highlightthickness=0,
+            font=("Roboto", 24 * -1),
+        )
+        entry_query.place(
+            x=47.0,
+            y=278.0,
+            width=414.0,
+            height=56.0
+        )
+
+        # Buttons
+
+        # Button Search
         canvas.place(x=0, y=0)
         self.btn_img_search = tk.PhotoImage(
             file=helper.assets("btn_search.png"))
@@ -60,6 +78,7 @@ class GUIResearch(tk.Toplevel):
             height=59.0
         )
 
+        # Button Open Link
         self.btn_img_open_link = tk.PhotoImage(
             file=helper.assets("btn_open_link.png"))
         btn_open_link = tk.Button(
@@ -77,6 +96,7 @@ class GUIResearch(tk.Toplevel):
             height=59.0
         )
 
+        # Button Back
         self.btn_img_back = tk.PhotoImage(
             file=helper.assets("btn_back.png"))
         btn_back = tk.Button(
@@ -94,24 +114,16 @@ class GUIResearch(tk.Toplevel):
             height=58.0
         )
 
-        entry_query = tk.Entry(
-            self,
-            bd=0,
-            bg="#EEEEEE",
-            highlightthickness=0,
-            font=("Roboto", 24 * -1),
-        )
-        entry_query.place(
-            x=47.0,
-            y=278.0,
-            width=414.0,
-            height=56.0
-        )
-
         self.resizable(False, False)
 
-    def create_tree(self, tree, query):
+    @staticmethod
+    def create_tree(tree, query):
+        """
 
+        :param tree: Which TreeView Widget?
+        :param query: Search Query --> Entry Text
+        :return tree: Return tree widget
+        """
         tree.heading("title", text="Title")
         tree.heading("publication_info", text="Publication")
         tree.heading("snippet", text="Snippet")
@@ -128,12 +140,10 @@ class GUIResearch(tk.Toplevel):
         )
         keys = ("title", "publication_info", "snippet", "title_link")
 
-        for dictionary in data:
-
+        for dictionary in data:                   # Join List of Dictionaries and insert needed data into TreeView
             tree_values = []
             for key in keys:
                 tree_values.append(dictionary[key])
-
             tree.insert("", tk.END, values=tuple(tree_values))
 
         tree.grid(row=0, column=0, sticky="nsew")
@@ -142,10 +152,13 @@ class GUIResearch(tk.Toplevel):
 
     @staticmethod
     def selected_item(tree: ttk.Treeview):
-        curItem = tree.focus()
-        tuple_item = tree.item(curItem, "values")
+        """
+        Get Link from selected row
+
+        :param tree: Which TreeView Widget
+        :return link: Return just the link of current item
+        """
+        cur_item = tree.focus()
+        tuple_item = tree.item(cur_item, "values")
         link = tuple_item[len(tuple_item)-1]
         return link
-
-
-
