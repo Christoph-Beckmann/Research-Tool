@@ -67,11 +67,15 @@ def generate_sim_matrix(sentences, stop_words=None):
     :return similarity_matrix: Return
     """
     similarity_matrix = np.zeros((len(sentences), len(sentences)))    # Create two-dimensional empty matrix
-    for idx1 in range(len(sentences)):
-        for idx2 in range(len(sentences)):
-            if idx1 == idx2:
+    for vector1 in range(len(sentences)):
+        for vector2 in range(len(sentences)):
+            if vector1 == vector2:
                 continue
-            similarity_matrix[idx1][idx2] = sentence_similarity(sentences[idx1], sentences[idx2], stop_words)
+            similarity_matrix[vector1][vector2] = sentence_similarity(
+                sentences[vector1],
+                sentences[vector2],
+                stop_words
+            )
 
         return similarity_matrix
 
