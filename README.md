@@ -10,6 +10,19 @@ by <a href="https://github.com/ChristophBeckmann">Christoph Beckmann</a> (2022)
 
 ---
 
+## Table of contents
+
+1. [Description](#💡-description)
+2. [How to install it](#⚙️-how-to-install-it)
+    1. [Step 1: Install all needed packages](#📦-step-1-install-all-needed-packages)
+    2. [Step 2: Run Application](#🏃-step-2-run-application)
+3. [Jobs](#🔥-jobs)
+    1. [1. Text summarization](#1-text-summarization)
+    2. [2. Keyword identification](#2-keywords-identification)
+    3. [3. Keyword analytics](#3-keyword-analytics)
+    4. [4. Further research](#4-further-research)
+4. [Licensing](#©️-licensing)
+
 ## 💡 Description
 
 Every day, we are confronted with a huge amount of data digitally. 
